@@ -291,6 +291,9 @@ const Sidebar: React.FC = () => {
           transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           borderRight: 'none',
           boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)',
+          position: 'fixed',
+          height: '100vh',
+          zIndex: 1200,
         },
       }}
     >

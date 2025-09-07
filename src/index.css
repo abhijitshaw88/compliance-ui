@@ -266,9 +266,22 @@ html, body, #root {
   color: #059669;
 }
 
-/* Enhanced Table Styling */
+/* Enhanced Table Styling with Glass Effects */
 .MuiTable-root {
   font-family: 'Inter', sans-serif;
+}
+
+.MuiTableContainer-root {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  overflow: hidden;
 }
 
 .MuiTableHead-root .MuiTableCell-root {
@@ -280,7 +293,10 @@ html, body, #root {
   color: #64748b;
   line-height: 1.25;
   padding: 16px 12px;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid rgba(226, 232, 240, 0.5);
+  background: rgba(248, 250, 252, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .MuiTableBody-root .MuiTableCell-root {
@@ -291,33 +307,96 @@ html, body, #root {
   line-height: 1.4;
   color: #1e293b;
   padding: 12px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid rgba(241, 245, 249, 0.5);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .MuiTableRow-root:hover .MuiTableCell-root {
-  background-color: #f8fafc;
+  background: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   color: #0f172a;
+  transform: scale(1.01);
+  transition: all 0.2s ease;
 }
 
-/* Enhanced Card Styling */
+.MuiTableRow-root {
+  transition: all 0.2s ease;
+}
+
+.MuiTableRow-root:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced Card Styling with Glass Effects */
 .MuiCard-root {
   font-family: 'Inter', sans-serif;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-  transition: all 0.2s ease-in-out;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.MuiCard-root::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
 }
 
 .MuiCard-root:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    0 6px 20px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
 }
 
 .MuiCardContent-root {
-  padding: 20px;
+  padding: 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .MuiCardContent-root:last-child {
-  padding-bottom: 20px;
+  padding-bottom: 24px;
+}
+
+/* Glass Effect Variants */
+.glass-card-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-card-medium {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-card-dark {
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
 /* Enhanced Typography Components */

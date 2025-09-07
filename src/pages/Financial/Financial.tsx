@@ -945,10 +945,10 @@ const Financial: React.FC = () => {
 
             {/* Enhanced Invoice Table */}
             {viewMode === 'table' && (
-              <TableContainer sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+              <TableContainer>
                 <Table>
                   <TableHead>
-                    <TableRow sx={{ backgroundColor: '#f8fafc' }}>
+                    <TableRow>
                       <TableCell className="table-header">Invoice #</TableCell>
                       <TableCell className="table-header">Client</TableCell>
                       <TableCell className="table-header">Amount</TableCell>

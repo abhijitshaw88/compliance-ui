@@ -203,24 +203,49 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
-          border: '1px solid rgba(226, 232, 240, 0.8)',
+          borderRadius: 16,
+          background: 'rgba(255, 255, 255, 0.85)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: `
+            0 8px 32px rgba(0, 0, 0, 0.1),
+            0 4px 16px rgba(0, 0, 0, 0.05),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3)
+          `,
           fontFamily: '"Inter", sans-serif',
-          '&:hover': {
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)',
-            transform: 'translateY(-1px)',
+          position: 'relative',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
           },
-          transition: 'all 0.2s ease-in-out',
+          '&:hover': {
+            background: 'rgba(255, 255, 255, 0.9)',
+            boxShadow: `
+              0 12px 40px rgba(0, 0, 0, 0.15),
+              0 6px 20px rgba(0, 0, 0, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.4)
+            `,
+            transform: 'translateY(-2px)',
+          },
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         },
       },
     },
     MuiCardContent: {
       styleOverrides: {
         root: {
-          padding: '20px',
+          padding: '24px',
+          position: 'relative',
+          zIndex: 1,
           '&:last-child': {
-            paddingBottom: '20px',
+            paddingBottom: '24px',
           },
         },
       },
@@ -296,8 +321,16 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 16,
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
-          border: '1px solid rgba(226, 232, 240, 0.8)',
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: `
+            0 8px 32px rgba(0, 0, 0, 0.1),
+            0 4px 16px rgba(0, 0, 0, 0.05),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3)
+          `,
+          overflow: 'hidden',
         },
       },
     },
@@ -305,13 +338,15 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiTableCell-head': {
-            backgroundColor: '#f8fafc',
+            backgroundColor: 'rgba(248, 250, 252, 0.8)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
             fontWeight: 600,
             fontSize: '0.875rem',
             letterSpacing: '0.025em',
             textTransform: 'uppercase',
             color: '#64748b',
-            borderBottom: '2px solid #e2e8f0',
+            borderBottom: '2px solid rgba(226, 232, 240, 0.5)',
             padding: '16px 12px',
             fontFamily: '"Inter", sans-serif',
           },
@@ -321,8 +356,11 @@ const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          borderBottom: '1px solid #f1f5f9',
+          borderBottom: '1px solid rgba(241, 245, 249, 0.5)',
           padding: '12px',
+          background: 'rgba(255, 255, 255, 0.3)',
+          backdropFilter: 'blur(5px)',
+          WebkitBackdropFilter: 'blur(5px)',
           fontFamily: '"Inter", sans-serif',
           fontWeight: 500,
           fontSize: '0.875rem',
@@ -335,10 +373,15 @@ const theme = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: {
+          transition: 'all 0.2s ease',
           '&:hover': {
-            backgroundColor: '#f8fafc',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
             '& .MuiTableCell-root': {
+              background: 'rgba(248, 250, 252, 0.9)',
+              backdropFilter: 'blur(15px)',
+              WebkitBackdropFilter: 'blur(15px)',
               color: '#0f172a',
+              transform: 'scale(1.01)',
             },
           },
           '&:last-child td': {

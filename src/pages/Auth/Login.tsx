@@ -27,7 +27,6 @@ import {
   Security,
   Speed,
   TrendingUp,
-  CheckCircle,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/redux';
