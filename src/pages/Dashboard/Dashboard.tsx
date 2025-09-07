@@ -18,13 +18,10 @@ import {
   Button,
   Fab,
   Tooltip,
-  Badge,
   Skeleton,
   Alert,
 } from '@mui/material';
 import {
-  TrendingUp,
-  TrendingDown,
   People,
   Assignment,
   CheckCircle,
@@ -47,8 +44,6 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { clientsApi, financialApi, complianceApi } from '../../services/api';
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -59,14 +54,12 @@ import {
   Cell,
   Area,
   AreaChart,
-  ScatterChart,
-  Scatter,
 } from 'recharts';
 
 const Dashboard: React.FC = () => {
   const theme = useTheme();
   const [refreshing, setRefreshing] = useState(false);
-  const [timeRange, setTimeRange] = useState('30d');
+  const [timeRange] = useState('30d');
 
   // Fetch data from APIs with better error handling
   const { data: clients = [], isLoading: clientsLoading, error: clientsError } = useQuery({
@@ -83,7 +76,7 @@ const Dashboard: React.FC = () => {
     staleTime: 5 * 60 * 1000,
   });
 
-  const { data: invoices = [], isLoading: invoicesLoading } = useQuery({
+  const { data: invoices = [] } = useQuery({
     queryKey: ['invoices'],
     queryFn: () => financialApi.getInvoices(),
     retry: 3,
@@ -106,7 +99,7 @@ const Dashboard: React.FC = () => {
     { name: 'Pending', value: 25, color: '#dc2626', count: 10 },
   ];
 
-  const clientGrowthData = [
+  // const clientGrowthData = [
     { month: 'Jan', new: 5, total: 45 },
     { month: 'Feb', new: 8, total: 53 },
     { month: 'Mar', new: 12, total: 65 },
