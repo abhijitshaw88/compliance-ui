@@ -28,7 +28,6 @@ import {
   Warning,
   Schedule,
   AccountBalance,
-  Assessment,
   CloudUpload,
   ArrowUpward,
   ArrowDownward,
@@ -42,7 +41,7 @@ import {
   Download,
 } from '@mui/icons-material';
 import { useQuery } from '@tanstack/react-query';
-import { clientsApi, financialApi, complianceApi } from '../../services/api';
+import { clientsApi, complianceApi } from '../../services/api';
 import {
   XAxis,
   YAxis,
@@ -76,13 +75,6 @@ const Dashboard: React.FC = () => {
     staleTime: 5 * 60 * 1000,
   });
 
-  const { data: invoices = [] } = useQuery({
-    queryKey: ['invoices'],
-    queryFn: () => financialApi.getInvoices(),
-    retry: 3,
-    staleTime: 5 * 60 * 1000,
-  });
-
   // Enhanced mock data with more realistic values
   const revenueData = [
     { month: 'Jan', revenue: 1200000, expenses: 800000, profit: 400000 },
@@ -99,94 +91,92 @@ const Dashboard: React.FC = () => {
     { name: 'Pending', value: 25, color: '#dc2626', count: 10 },
   ];
 
-  const clientGrowthData = [
-    { month: 'Jan', new: 5, total: 45 },
-    { month: 'Feb', new: 8, total: 53 },
-    { month: 'Mar', new: 12, total: 65 },
-    { month: 'Apr', new: 6, total: 71 },
-    { month: 'May', new: 15, total: 86 },
-    { month: 'Jun', new: 18, total: 104 },
-  ];
-
   const upcomingDeadlines = [
-    { 
-      text: 'GST Return Due', 
-      date: '15 Nov', 
-      priority: 'high', 
+    {
+      text: 'GST Return Due',
+      date: '15 Nov',
+      priority: 'high',
       client: 'Sharma & Associates',
       type: 'GST',
-      daysLeft: 3
+      daysLeft: 3,
     },
-    { 
-      text: 'TDS Payment Due', 
-      date: '7 Nov', 
-      priority: 'medium', 
+    {
+      text: 'TDS Payment Due',
+      date: '7 Nov',
+      priority: 'medium',
       client: 'InnovatEX Solutions',
       type: 'TDS',
-      daysLeft: 1
+      daysLeft: 1,
     },
-    { 
-      text: 'ITR Filing', 
-      date: '31 Dec', 
-      priority: 'low', 
+    {
+      text: 'ITR Filing',
+      date: '31 Dec',
+      priority: 'low',
       client: 'Gupta Enterprises',
       type: 'ITR',
-      daysLeft: 45
+      daysLeft: 45,
     },
   ];
 
   const recentActivities = [
-    { 
-      text: 'GST Return Filed', 
-      client: 'Sharma & Associates LLP', 
-      time: '2 hours ago', 
+    {
+      text: 'GST Return Filed',
+      client: 'Sharma & Associates LLP',
+      time: '2 hours ago',
       type: 'success',
-      amount: '₹45,000'
+      amount: '₹45,000',
     },
-    { 
-      text: 'Payment Overdue', 
-      client: 'InnovatEX Solutions', 
-      time: '4 hours ago', 
+    {
+      text: 'Payment Overdue',
+      client: 'InnovatEX Solutions',
+      time: '4 hours ago',
       type: 'warning',
-      amount: '₹12,500'
+      amount: '₹12,500',
     },
-    { 
-      text: 'New Project Created', 
-      client: 'TDS Compliance', 
-      time: '6 hours ago', 
+    {
+      text: 'New Project Created',
+      client: 'TDS Compliance',
+      time: '6 hours ago',
       type: 'info',
-      amount: '₹8,000'
+      amount: '₹8,000',
     },
-    { 
-      text: 'Invoice Generated', 
-      client: 'Gupta Enterprises', 
-      time: '8 hours ago', 
+    {
+      text: 'Invoice Generated',
+      client: 'Gupta Enterprises',
+      time: '8 hours ago',
       type: 'success',
-      amount: '₹25,000'
+      amount: '₹25,000',
     },
   ];
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'error';
-      case 'medium': return 'warning';
-      case 'low': return 'success';
-      default: return 'default';
+      case 'high':
+        return 'error';
+      case 'medium':
+        return 'warning';
+      case 'low':
+        return 'success';
+      default:
+        return 'default';
     }
   };
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'success': return <CheckCircle color="success" />;
-      case 'warning': return <Warning color="warning" />;
-      case 'info': return <Assignment color="primary" />;
-      default: return <Schedule color="action" />;
+      case 'success':
+        return <CheckCircle color="success" />;
+      case 'warning':
+        return <Warning color="warning" />;
+      case 'info':
+        return <Assignment color="primary" />;
+      default:
+        return <Schedule color="action" />;
     }
   };
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    // Simulate refresh delay
     setTimeout(() => setRefreshing(false), 1000);
   };
 
@@ -231,7 +221,7 @@ const Dashboard: React.FC = () => {
             </IconButton>
           </Box>
         </Box>
-        
+
         <Typography variant="h4" fontWeight={800} color="text.primary" gutterBottom>
           {value}
         </Typography>
@@ -243,7 +233,7 @@ const Dashboard: React.FC = () => {
             {subtitle}
           </Typography>
         )}
-        
+
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {change > 0 ? (
@@ -304,12 +294,12 @@ const Dashboard: React.FC = () => {
       <Box sx={{ mb: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
           <Box>
-            <Typography 
-              variant="h3" 
-              component="h1" 
-              fontWeight={800} 
+            <Typography
+              variant="h3"
+              component="h1"
+              fontWeight={800}
               gutterBottom
-              sx={{ 
+              sx={{
                 fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
                 background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
                 backgroundClip: 'text',
@@ -319,11 +309,7 @@ const Dashboard: React.FC = () => {
             >
               Welcome back! 👋
             </Typography>
-            <Typography 
-              variant="h6" 
-              color="text.secondary" 
-              sx={{ mb: 3 }}
-            >
+            <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
               Here's what's happening with your practice today.
             </Typography>
           </Box>
@@ -337,34 +323,15 @@ const Dashboard: React.FC = () => {
             >
               {refreshing ? 'Refreshing...' : 'Refresh'}
             </Button>
-            <Button
-              variant="contained"
-              startIcon={<Download />}
-              sx={{ borderRadius: 3 }}
-            >
+            <Button variant="contained" startIcon={<Download />} sx={{ borderRadius: 3 }}>
               Export Report
             </Button>
           </Box>
         </Box>
-        
-        <Box sx={{ 
-          display: 'flex', 
-          gap: 2, 
-          flexWrap: 'wrap',
-          alignItems: 'center',
-        }}>
-          <Chip
-            icon={<Star />}
-            label="Performance: Excellent"
-            color="success"
-            sx={{ fontWeight: 600 }}
-          />
-          <Chip
-            icon={<Speed />}
-            label="System Status: Online"
-            color="primary"
-            sx={{ fontWeight: 600 }}
-          />
+
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Chip icon={<Star />} label="Performance: Excellent" color="success" sx={{ fontWeight: 600 }} />
+          <Chip icon={<Speed />} label="System Status: Online" color="primary" sx={{ fontWeight: 600 }} />
           <Chip
             icon={<Notifications />}
             label="3 New Notifications"
@@ -454,12 +421,12 @@ const Dashboard: React.FC = () => {
                   <AreaChart data={revenueData}>
                     <defs>
                       <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
                       </linearGradient>
                       <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#dc2626" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#dc2626" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#dc2626" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#dc2626" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke={alpha(theme.palette.divider, 0.3)} />
@@ -566,37 +533,40 @@ const Dashboard: React.FC = () => {
                   Filter
                 </Button>
               </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Stay on top of your important deadlines
-              </Typography>
               <List>
                 {upcomingDeadlines.map((deadline, index) => (
                   <React.Fragment key={index}>
-                    <ListItem sx={{ px: 0, py: 1.5 }}>
-                      <ListItemIcon>
-                        <Schedule color="primary" />
-                      </ListItemIcon>
+                    <ListItem
+                      sx={{
+                        borderRadius: 2,
+                        mb: 1,
+                        '&:hover': {
+                          backgroundColor: alpha(theme.palette.primary.main, 0.04),
+                        },
+                      }}
+                    >
+                      <ListItemIcon>{getActivityIcon(deadline.priority)}</ListItemIcon>
                       <ListItemText
                         primary={
-                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Typography variant="body1" fontWeight={600}>
-                              {deadline.text}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                              {deadline.daysLeft} days left
-                            </Typography>
-                          </Box>
+                          <Typography fontWeight={600} color="text.primary">
+                            {deadline.text}
+                          </Typography>
                         }
-                        secondary={`${deadline.client} • ${deadline.date} • ${deadline.type}`}
+                        secondary={
+                          <>
+                            <Typography component="span" variant="body2" color="text.secondary">
+                              {deadline.client} • {deadline.type}
+                            </Typography>
+                          </>
+                        }
                       />
                       <Chip
-                        label={deadline.priority}
-                        color={getPriorityColor(deadline.priority) as any}
+                        label={`${deadline.daysLeft} days`}
                         size="small"
-                        sx={{ fontWeight: 600, ml: 1 }}
+                        color={getPriorityColor(deadline.priority)}
                       />
                     </ListItem>
-                    {index < upcomingDeadlines.length - 1 && <Divider sx={{ mx: 2 }} />}
+                    {index < upcomingDeadlines.length - 1 && <Divider />}
                   </React.Fragment>
                 ))}
               </List>
@@ -604,43 +574,49 @@ const Dashboard: React.FC = () => {
           </Card>
         </Grid>
 
-        {/* Recent Activity */}
+        {/* Recent Activities */}
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h6" fontWeight={700}>
-                  Recent Activity
-                </Typography>
-                <Button size="small">
-                  View All
-                </Button>
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Latest updates from your practice
+              <Typography variant="h6" fontWeight={700} gutterBottom>
+                Recent Activities
               </Typography>
               <List>
                 {recentActivities.map((activity, index) => (
                   <React.Fragment key={index}>
-                    <ListItem sx={{ px: 0, py: 1.5 }}>
-                      <ListItemIcon>
-                        {getActivityIcon(activity.type)}
-                      </ListItemIcon>
+                    <ListItem
+                      sx={{
+                        borderRadius: 2,
+                        mb: 1,
+                        '&:hover': {
+                          backgroundColor: alpha(theme.palette.primary.main, 0.04),
+                        },
+                      }}
+                    >
+                      <ListItemIcon>{getActivityIcon(activity.type)}</ListItemIcon>
                       <ListItemText
                         primary={
-                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Typography variant="body1" fontWeight={600}>
-                              {activity.text}
-                            </Typography>
-                            <Typography variant="body2" color="success.main" fontWeight={600}>
-                              {activity.amount}
-                            </Typography>
-                          </Box>
+                          <Typography fontWeight={600} color="text.primary">
+                            {activity.text}
+                          </Typography>
                         }
-                        secondary={`${activity.client} • ${activity.time}`}
+                        secondary={
+                          <>
+                            <Typography component="span" variant="body2" color="text.secondary">
+                              {activity.client}
+                            </Typography>
+                            {' • '}
+                            <Typography component="span" variant="caption" color="text.secondary">
+                              {activity.time}
+                            </Typography>
+                          </>
+                        }
                       />
+                      <Typography variant="body2" fontWeight={600} color="primary">
+                        {activity.amount}
+                      </Typography>
                     </ListItem>
-                    {index < recentActivities.length - 1 && <Divider sx={{ mx: 2 }} />}
+                    {index < recentActivities.length - 1 && <Divider />}
                   </React.Fragment>
                 ))}
               </List>
@@ -649,25 +625,35 @@ const Dashboard: React.FC = () => {
         </Grid>
       </Grid>
 
-      {/* Quick Actions FAB */}
-      <Box sx={{ position: 'fixed', bottom: 24, right: 24, display: 'flex', flexDirection: 'column', gap: 2 }}>
+      {/* Floating Quick Actions */}
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 24,
+          right: 24,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          zIndex: 1200,
+        }}
+      >
         <QuickActionButton
           icon={<Add />}
-          label="Add New Client"
+          label="New Client"
           color={theme.palette.primary.main}
-          onClick={() => console.log('Add client')}
+          onClick={() => console.log('Add new client')}
+        />
+        <QuickActionButton
+          icon={<Assignment />}
+          label="New Project"
+          color={theme.palette.success.main}
+          onClick={() => console.log('Add new project')}
         />
         <QuickActionButton
           icon={<CloudUpload />}
           label="Upload Document"
-          color={theme.palette.secondary.main}
+          color={theme.palette.warning.main}
           onClick={() => console.log('Upload document')}
-        />
-        <QuickActionButton
-          icon={<Assessment />}
-          label="Generate Report"
-          color={theme.palette.success.main}
-          onClick={() => console.log('Generate report')}
         />
       </Box>
     </Box>
