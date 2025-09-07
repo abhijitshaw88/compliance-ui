@@ -31,6 +31,8 @@ import {
   Warning,
   Schedule,
   AccountBalance,
+  Assessment,
+  CloudUpload,
   ArrowUpward,
   ArrowDownward,
   Star,
