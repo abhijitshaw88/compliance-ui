@@ -99,7 +99,7 @@ const Dashboard: React.FC = () => {
     { name: 'Pending', value: 25, color: '#dc2626', count: 10 },
   ];
 
-  // const clientGrowthData = [
+  const clientGrowthData = [
     { month: 'Jan', new: 5, total: 45 },
     { month: 'Feb', new: 8, total: 53 },
     { month: 'Mar', new: 12, total: 65 },
