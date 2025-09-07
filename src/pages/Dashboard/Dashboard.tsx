@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
   Grid,
   Card,
   CardContent,
-  LinearProgress,
   List,
   ListItem,
   ListItemText,
@@ -13,25 +12,35 @@ import {
   Chip,
   Avatar,
   IconButton,
-  Paper,
   useTheme,
   alpha,
   Divider,
+  Button,
+  Fab,
+  Tooltip,
+  Badge,
+  Skeleton,
+  Alert,
 } from '@mui/material';
 import {
   TrendingUp,
   TrendingDown,
   People,
   Assignment,
-  Notifications,
-  MoreVert,
   CheckCircle,
   Warning,
   Schedule,
   AccountBalance,
-  Assessment,
-  CloudUpload,
-  Business,
+  ArrowUpward,
+  ArrowDownward,
+  Star,
+  Speed,
+  MoreVert,
+  Refresh,
+  Notifications,
+  Add,
+  FilterList,
+  Download,
 } from '@mui/icons-material';
 import { useQuery } from '@tanstack/react-query';
 import { clientsApi, financialApi, complianceApi } from '../../services/api';
@@ -41,56 +50,125 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
+  Tooltip as RechartsTooltip,
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
-  BarChart,
-  Bar,
+  Area,
+  AreaChart,
+  ScatterChart,
+  Scatter,
 } from 'recharts';
 
 const Dashboard: React.FC = () => {
   const theme = useTheme();
+  const [refreshing, setRefreshing] = useState(false);
+  const [timeRange, setTimeRange] = useState('30d');
 
-  // Fetch data from APIs
-  const { data: clients = [], isLoading: clientsLoading } = useQuery({
+  // Fetch data from APIs with better error handling
+  const { data: clients = [], isLoading: clientsLoading, error: clientsError } = useQuery({
     queryKey: ['clients'],
     queryFn: () => clientsApi.getClients(),
+    retry: 3,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const { data: projects = [], isLoading: projectsLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: () => complianceApi.getProjects(),
+    retry: 3,
+    staleTime: 5 * 60 * 1000,
   });
 
   const { data: invoices = [], isLoading: invoicesLoading } = useQuery({
     queryKey: ['invoices'],
     queryFn: () => financialApi.getInvoices(),
+    retry: 3,
+    staleTime: 5 * 60 * 1000,
   });
 
-  // Mock data for charts (replace with real data later)
+  // Enhanced mock data with more realistic values
   const revenueData = [
-    { month: 'Jan', revenue: 1200000, expenses: 800000 },
-    { month: 'Feb', revenue: 1500000, expenses: 900000 },
-    { month: 'Mar', revenue: 1800000, expenses: 1000000 },
-    { month: 'Apr', revenue: 1600000, expenses: 950000 },
-    { month: 'May', revenue: 2000000, expenses: 1100000 },
-    { month: 'Jun', revenue: 2200000, expenses: 1200000 },
+    { month: 'Jan', revenue: 1200000, expenses: 800000, profit: 400000 },
+    { month: 'Feb', revenue: 1500000, expenses: 900000, profit: 600000 },
+    { month: 'Mar', revenue: 1800000, expenses: 1000000, profit: 800000 },
+    { month: 'Apr', revenue: 1600000, expenses: 950000, profit: 650000 },
+    { month: 'May', revenue: 2000000, expenses: 1100000, profit: 900000 },
+    { month: 'Jun', revenue: 2200000, expenses: 1200000, profit: 1000000 },
   ];
 
   const projectStatusData = [
-    { name: 'Completed', value: 45, color: '#4caf50' },
-    { name: 'In Progress', value: 30, color: '#ff9800' },
-    { name: 'Pending', value: 25, color: '#f44336' },
+    { name: 'Completed', value: 45, color: '#059669', count: 18 },
+    { name: 'In Progress', value: 30, color: '#d97706', count: 12 },
+    { name: 'Pending', value: 25, color: '#dc2626', count: 10 },
   ];
 
-  const COLORS = ['#4caf50', '#ff9800', '#f44336'];
+  const clientGrowthData = [
+    { month: 'Jan', new: 5, total: 45 },
+    { month: 'Feb', new: 8, total: 53 },
+    { month: 'Mar', new: 12, total: 65 },
+    { month: 'Apr', new: 6, total: 71 },
+    { month: 'May', new: 15, total: 86 },
+    { month: 'Jun', new: 18, total: 104 },
+  ];
 
   const upcomingDeadlines = [
-    { text: 'GST Return Due', date: '15 Nov', priority: 'high' },
-    { text: 'TDS Payment Due', date: '7 Nov', priority: 'medium' },
-    { text: 'ITR Filing', date: '31 Dec', priority: 'low' },
+    { 
+      text: 'GST Return Due', 
+      date: '15 Nov', 
+      priority: 'high', 
+      client: 'Sharma & Associates',
+      type: 'GST',
+      daysLeft: 3
+    },
+    { 
+      text: 'TDS Payment Due', 
+      date: '7 Nov', 
+      priority: 'medium', 
+      client: 'InnovatEX Solutions',
+      type: 'TDS',
+      daysLeft: 1
+    },
+    { 
+      text: 'ITR Filing', 
+      date: '31 Dec', 
+      priority: 'low', 
+      client: 'Gupta Enterprises',
+      type: 'ITR',
+      daysLeft: 45
+    },
+  ];
+
+  const recentActivities = [
+    { 
+      text: 'GST Return Filed', 
+      client: 'Sharma & Associates LLP', 
+      time: '2 hours ago', 
+      type: 'success',
+      amount: '₹45,000'
+    },
+    { 
+      text: 'Payment Overdue', 
+      client: 'InnovatEX Solutions', 
+      time: '4 hours ago', 
+      type: 'warning',
+      amount: '₹12,500'
+    },
+    { 
+      text: 'New Project Created', 
+      client: 'TDS Compliance', 
+      time: '6 hours ago', 
+      type: 'info',
+      amount: '₹8,000'
+    },
+    { 
+      text: 'Invoice Generated', 
+      client: 'Gupta Enterprises', 
+      time: '8 hours ago', 
+      type: 'success',
+      amount: '₹25,000'
+    },
   ];
 
   const getPriorityColor = (priority: string) => {
@@ -102,14 +180,29 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const StatCard = ({ title, value, change, icon, color }: any) => (
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'success': return <CheckCircle color="success" />;
+      case 'warning': return <Warning color="warning" />;
+      case 'info': return <Assignment color="primary" />;
+      default: return <Schedule color="action" />;
+    }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    // Simulate refresh delay
+    setTimeout(() => setRefreshing(false), 1000);
+  };
+
+  const StatCard = ({ title, value, change, icon, color, subtitle, trend }: any) => (
     <Card
       sx={{
+        height: '100%',
         background: `linear-gradient(135deg, ${alpha(color, 0.1)} 0%, ${alpha(color, 0.05)} 100%)`,
         border: `1px solid ${alpha(color, 0.2)}`,
-        borderRadius: 3,
-        overflow: 'hidden',
         position: 'relative',
+        overflow: 'hidden',
         '&:hover': {
           transform: 'translateY(-4px)',
           boxShadow: `0 8px 25px ${alpha(color, 0.15)}`,
@@ -121,90 +214,215 @@ const Dashboard: React.FC = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
           <Avatar
             sx={{
-              bgcolor: alpha(color, 0.1),
-              color: color,
               width: 48,
               height: 48,
+              background: `linear-gradient(135deg, ${color} 0%, ${alpha(color, 0.8)} 100%)`,
+              boxShadow: `0 4px 12px ${alpha(color, 0.3)}`,
             }}
           >
             {icon}
           </Avatar>
-          <IconButton size="small" sx={{ color: 'text.secondary' }}>
-            <MoreVert />
-          </IconButton>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {trend && (
+              <Chip
+                label={trend}
+                size="small"
+                color={trend === 'Up' ? 'success' : 'error'}
+                sx={{ fontSize: '0.7rem' }}
+              />
+            )}
+            <IconButton size="small" sx={{ color: 'text.secondary' }}>
+              <MoreVert />
+            </IconButton>
+          </Box>
         </Box>
-        <Typography variant="h4" fontWeight="bold" color="text.primary" gutterBottom>
+        
+        <Typography variant="h4" fontWeight={800} color="text.primary" gutterBottom>
           {value}
         </Typography>
-        <Typography variant="body2" color="text.secondary" gutterBottom>
+        <Typography variant="body1" color="text.secondary" gutterBottom sx={{ mb: 2 }}>
           {title}
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-          {change > 0 ? (
-            <TrendingUp sx={{ color: 'success.main', fontSize: 16, mr: 0.5 }} />
-          ) : (
-            <TrendingDown sx={{ color: 'error.main', fontSize: 16, mr: 0.5 }} />
-          )}
-          <Typography
-            variant="body2"
-            color={change > 0 ? 'success.main' : 'error.main'}
-            fontWeight={600}
-          >
-            {Math.abs(change)}% from last month
+        {subtitle && (
+          <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+            {subtitle}
+          </Typography>
+        )}
+        
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {change > 0 ? (
+              <ArrowUpward sx={{ color: 'success.main', fontSize: 18, mr: 0.5 }} />
+            ) : (
+              <ArrowDownward sx={{ color: 'error.main', fontSize: 18, mr: 0.5 }} />
+            )}
+            <Typography
+              variant="body2"
+              color={change > 0 ? 'success.main' : 'error.main'}
+              fontWeight={600}
+            >
+              {Math.abs(change)}%
+            </Typography>
+          </Box>
+          <Typography variant="caption" color="text.secondary">
+            vs last month
           </Typography>
         </Box>
       </CardContent>
     </Card>
   );
 
+  const QuickActionButton = ({ icon, label, color, onClick }: any) => (
+    <Tooltip title={label}>
+      <Fab
+        size="medium"
+        sx={{
+          background: `linear-gradient(135deg, ${color} 0%, ${alpha(color, 0.8)} 100%)`,
+          color: 'white',
+          boxShadow: `0 4px 12px ${alpha(color, 0.3)}`,
+          '&:hover': {
+            transform: 'scale(1.1)',
+            boxShadow: `0 6px 16px ${alpha(color, 0.4)}`,
+          },
+          transition: 'all 0.2s ease',
+        }}
+        onClick={onClick}
+      >
+        {icon}
+      </Fab>
+    </Tooltip>
+  );
+
+  if (clientsError) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Alert severity="error" sx={{ mb: 3 }}>
+          Failed to load dashboard data. Please try again.
+        </Alert>
+      </Box>
+    );
+  }
+
   return (
-    <Box sx={{ p: 3 }}>
+    <Box>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
-          Dashboard
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Welcome back! Here's what's happening with your practice.
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+          <Box>
+            <Typography 
+              variant="h3" 
+              component="h1" 
+              fontWeight={800} 
+              gutterBottom
+              sx={{ 
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Welcome back! 👋
+            </Typography>
+            <Typography 
+              variant="h6" 
+              color="text.secondary" 
+              sx={{ mb: 3 }}
+            >
+              Here's what's happening with your practice today.
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <Button
+              variant="outlined"
+              startIcon={<Refresh />}
+              onClick={handleRefresh}
+              disabled={refreshing}
+              sx={{ borderRadius: 3 }}
+            >
+              {refreshing ? 'Refreshing...' : 'Refresh'}
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Download />}
+              sx={{ borderRadius: 3 }}
+            >
+              Export Report
+            </Button>
+          </Box>
+        </Box>
+        
+        <Box sx={{ 
+          display: 'flex', 
+          gap: 2, 
+          flexWrap: 'wrap',
+          alignItems: 'center',
+        }}>
+          <Chip
+            icon={<Star />}
+            label="Performance: Excellent"
+            color="success"
+            sx={{ fontWeight: 600 }}
+          />
+          <Chip
+            icon={<Speed />}
+            label="System Status: Online"
+            color="primary"
+            sx={{ fontWeight: 600 }}
+          />
+          <Chip
+            icon={<Notifications />}
+            label="3 New Notifications"
+            color="warning"
+            sx={{ fontWeight: 600 }}
+          />
+        </Box>
       </Box>
 
       {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatCard
             title="Total Revenue"
             value="₹1,50,00,000"
             change={12.5}
             icon={<AccountBalance />}
             color={theme.palette.success.main}
+            subtitle="FY 2023-24"
+            trend="Up"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatCard
             title="Total Clients"
-            value={clients.length || 0}
+            value={clientsLoading ? <Skeleton width={60} /> : clients.length || 0}
             change={8.2}
             icon={<People />}
             color={theme.palette.primary.main}
+            subtitle="Active clients"
+            trend="Up"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatCard
             title="Active Projects"
-            value={projects.length || 0}
+            value={projectsLoading ? <Skeleton width={60} /> : projects.length || 0}
             change={-2.1}
             icon={<Assignment />}
             color={theme.palette.warning.main}
+            subtitle="In progress"
+            trend="Down"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatCard
             title="Pending Tasks"
             value="12"
             change={-15.3}
             icon={<Schedule />}
             color={theme.palette.error.main}
+            subtitle="Due this week"
+            trend="Down"
           />
         </Grid>
       </Grid>
@@ -213,69 +431,100 @@ const Dashboard: React.FC = () => {
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {/* Revenue Chart */}
         <Grid item xs={12} lg={8}>
-          <Card sx={{ borderRadius: 3, overflow: 'hidden' }}>
+          <Card>
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>
-                Revenue Overview
-              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Box>
+                  <Typography variant="h5" fontWeight={700} gutterBottom>
+                    Revenue Overview
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Track your monthly revenue and expenses
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button size="small" variant={timeRange === '7d' ? 'contained' : 'outlined'}>
+                    7D
+                  </Button>
+                  <Button size="small" variant={timeRange === '30d' ? 'contained' : 'outlined'}>
+                    30D
+                  </Button>
+                  <Button size="small" variant={timeRange === '90d' ? 'contained' : 'outlined'}>
+                    90D
+                  </Button>
+                </Box>
+              </Box>
               <Box sx={{ height: 300, mt: 2 }}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={revenueData}>
+                  <AreaChart data={revenueData}>
+                    <defs>
+                      <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
+                      </linearGradient>
+                      <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#dc2626" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#dc2626" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke={alpha(theme.palette.divider, 0.3)} />
                     <XAxis dataKey="month" />
                     <YAxis />
-                    <Tooltip
+                    <RechartsTooltip
                       contentStyle={{
                         backgroundColor: theme.palette.background.paper,
                         border: `1px solid ${theme.palette.divider}`,
-                        borderRadius: 8,
+                        borderRadius: 12,
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                       }}
                     />
-                    <Line
+                    <Area
                       type="monotone"
                       dataKey="revenue"
-                      stroke={theme.palette.primary.main}
+                      stroke="#2563eb"
+                      fillOpacity={1}
+                      fill="url(#revenueGradient)"
                       strokeWidth={3}
-                      dot={{ fill: theme.palette.primary.main, strokeWidth: 2, r: 4 }}
                     />
-                    <Line
+                    <Area
                       type="monotone"
                       dataKey="expenses"
-                      stroke={theme.palette.error.main}
+                      stroke="#dc2626"
+                      fillOpacity={1}
+                      fill="url(#expenseGradient)"
                       strokeWidth={3}
-                      dot={{ fill: theme.palette.error.main, strokeWidth: 2, r: 4 }}
                     />
-                  </LineChart>
+                  </AreaChart>
                 </ResponsiveContainer>
               </Box>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Project Status Pie Chart */}
+        {/* Project Status */}
         <Grid item xs={12} lg={4}>
-          <Card sx={{ borderRadius: 3, overflow: 'hidden' }}>
+          <Card>
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>
+              <Typography variant="h6" fontWeight={700} gutterBottom>
                 Project Status
               </Typography>
-              <Box sx={{ height: 300, mt: 2 }}>
+              <Box sx={{ height: 250, mt: 2 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={projectStatusData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={60}
-                      outerRadius={100}
+                      innerRadius={40}
+                      outerRadius={80}
                       paddingAngle={5}
                       dataKey="value"
                     >
                       {projectStatusData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <RechartsTooltip />
                   </PieChart>
                 </ResponsiveContainer>
               </Box>
@@ -294,8 +543,11 @@ const Dashboard: React.FC = () => {
                     <Typography variant="body2" sx={{ flexGrow: 1 }}>
                       {item.name}
                     </Typography>
-                    <Typography variant="body2" fontWeight="bold">
+                    <Typography variant="body2" fontWeight={700} sx={{ mr: 1 }}>
                       {item.value}%
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      ({item.count})
                     </Typography>
                   </Box>
                 ))}
@@ -309,29 +561,47 @@ const Dashboard: React.FC = () => {
       <Grid container spacing={3}>
         {/* Upcoming Deadlines */}
         <Grid item xs={12} md={6}>
-          <Card sx={{ borderRadius: 3, overflow: 'hidden' }}>
+          <Card>
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>
-                Upcoming Deadlines
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Typography variant="h6" fontWeight={700}>
+                  Upcoming Deadlines
+                </Typography>
+                <Button size="small" startIcon={<FilterList />}>
+                  Filter
+                </Button>
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                Stay on top of your important deadlines
               </Typography>
               <List>
                 {upcomingDeadlines.map((deadline, index) => (
                   <React.Fragment key={index}>
-                    <ListItem sx={{ px: 0 }}>
+                    <ListItem sx={{ px: 0, py: 1.5 }}>
                       <ListItemIcon>
                         <Schedule color="primary" />
                       </ListItemIcon>
                       <ListItemText
-                        primary={deadline.text}
-                        secondary={deadline.date}
+                        primary={
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography variant="body1" fontWeight={600}>
+                              {deadline.text}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              {deadline.daysLeft} days left
+                            </Typography>
+                          </Box>
+                        }
+                        secondary={`${deadline.client} • ${deadline.date} • ${deadline.type}`}
                       />
                       <Chip
                         label={deadline.priority}
                         color={getPriorityColor(deadline.priority) as any}
                         size="small"
+                        sx={{ fontWeight: 600, ml: 1 }}
                       />
                     </ListItem>
-                    {index < upcomingDeadlines.length - 1 && <Divider />}
+                    {index < upcomingDeadlines.length - 1 && <Divider sx={{ mx: 2 }} />}
                   </React.Fragment>
                 ))}
               </List>
@@ -341,46 +611,70 @@ const Dashboard: React.FC = () => {
 
         {/* Recent Activity */}
         <Grid item xs={12} md={6}>
-          <Card sx={{ borderRadius: 3, overflow: 'hidden' }}>
+          <Card>
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>
-                Recent Activity
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Typography variant="h6" fontWeight={700}>
+                  Recent Activity
+                </Typography>
+                <Button size="small">
+                  View All
+                </Button>
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                Latest updates from your practice
               </Typography>
               <List>
-                <ListItem sx={{ px: 0 }}>
-                  <ListItemIcon>
-                    <CheckCircle color="success" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="GST Return Filed"
-                    secondary="Sharma & Associates LLP - 2 hours ago"
-                  />
-                </ListItem>
-                <Divider />
-                <ListItem sx={{ px: 0 }}>
-                  <ListItemIcon>
-                    <Warning color="warning" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Payment Overdue"
-                    secondary="InnovatEX Solutions - 4 hours ago"
-                  />
-                </ListItem>
-                <Divider />
-                <ListItem sx={{ px: 0 }}>
-                  <ListItemIcon>
-                    <Assignment color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="New Project Created"
-                    secondary="TDS Compliance - 6 hours ago"
-                  />
-                </ListItem>
+                {recentActivities.map((activity, index) => (
+                  <React.Fragment key={index}>
+                    <ListItem sx={{ px: 0, py: 1.5 }}>
+                      <ListItemIcon>
+                        {getActivityIcon(activity.type)}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography variant="body1" fontWeight={600}>
+                              {activity.text}
+                            </Typography>
+                            <Typography variant="body2" color="success.main" fontWeight={600}>
+                              {activity.amount}
+                            </Typography>
+                          </Box>
+                        }
+                        secondary={`${activity.client} • ${activity.time}`}
+                      />
+                    </ListItem>
+                    {index < recentActivities.length - 1 && <Divider sx={{ mx: 2 }} />}
+                  </React.Fragment>
+                ))}
               </List>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
+
+      {/* Quick Actions FAB */}
+      <Box sx={{ position: 'fixed', bottom: 24, right: 24, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <QuickActionButton
+          icon={<Add />}
+          label="Add New Client"
+          color={theme.palette.primary.main}
+          onClick={() => console.log('Add client')}
+        />
+        <QuickActionButton
+          icon={<CloudUpload />}
+          label="Upload Document"
+          color={theme.palette.secondary.main}
+          onClick={() => console.log('Upload document')}
+        />
+        <QuickActionButton
+          icon={<Assessment />}
+          label="Generate Report"
+          color={theme.palette.success.main}
+          onClick={() => console.log('Generate report')}
+        />
+      </Box>
     </Box>
   );
 };

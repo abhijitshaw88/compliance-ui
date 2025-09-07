@@ -4,10 +4,7 @@ import {
   Typography,
   Paper,
   Grid,
-  Card,
-  CardContent,
   Button,
-  TextField,
   Chip,
   LinearProgress,
   List,
@@ -27,7 +24,7 @@ import {
 const DataEntry: React.FC = () => {
   const [dragActive, setDragActive] = useState(false);
   const [processingStatus, setProcessingStatus] = useState('idle');
-  const [aiAccuracy, setAiAccuracy] = useState(95);
+  const [aiAccuracy] = useState(95);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();

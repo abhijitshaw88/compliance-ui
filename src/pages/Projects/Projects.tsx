@@ -9,10 +9,6 @@ import {
   CardContent,
   Chip,
   LinearProgress,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
   Tabs,
   Tab,
   Table,
@@ -31,7 +27,6 @@ import {
   Assignment as AssignmentIcon,
   Schedule as ScheduleIcon,
   CheckCircle as CheckCircleIcon,
-  Warning as WarningIcon,
   Person as PersonIcon,
 } from '@mui/icons-material';
 
@@ -60,7 +55,7 @@ function TabPanel(props: TabPanelProps) {
 const Projects: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [selectedProjectId] = useState<number | null>(null);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);

@@ -13,14 +13,15 @@ import {
   InputAdornment,
   useTheme,
   useMediaQuery,
+  alpha,
+  Chip,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
   Search as SearchIcon,
   Notifications as NotificationsIcon,
-  AccountCircle as AccountCircleIcon,
-  Logout as LogoutIcon,
   Settings as SettingsIcon,
+  Logout as LogoutIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -33,7 +34,6 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const { sidebarOpen } = useAppSelector((state) => state.ui);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,7 +54,6 @@ const Header: React.FC = () => {
 
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
-    // Implement search functionality
     console.log('Search query:', searchQuery);
   };
 
@@ -63,15 +62,13 @@ const Header: React.FC = () => {
       position="static"
       elevation={0}
       sx={{
-        backgroundColor: 'white',
-        borderBottom: '1px solid',
-        borderColor: 'divider',
-        color: 'text.primary',
-        backdropFilter: 'blur(10px)',
-        background: 'rgba(255, 255, 255, 0.8)',
+        background: 'white',
+        borderBottom: '1px solid #e2e8f0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+        height: 72,
       }}
     >
-      <Toolbar sx={{ minHeight: 64 }}>
+      <Toolbar sx={{ height: 72, px: { xs: 2, sm: 3 } }}>
         {/* Menu Button */}
         <IconButton
           edge="start"
@@ -80,9 +77,9 @@ const Header: React.FC = () => {
           onClick={() => dispatch(toggleSidebar())}
           sx={{ 
             mr: 2,
-            bgcolor: 'grey.100',
+            color: '#64748b',
             '&:hover': {
-              bgcolor: 'grey.200',
+              backgroundColor: alpha(theme.palette.primary.main, 0.08),
             },
           }}
         >
@@ -101,27 +98,27 @@ const Header: React.FC = () => {
         >
           <TextField
             fullWidth
-            size="small"
             placeholder="Search clients, invoices, transactions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            size="small"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon color="action" />
+                  <SearchIcon sx={{ color: '#94a3b8' }} />
                 </InputAdornment>
               ),
             }}
             sx={{
               '& .MuiOutlinedInput-root': {
-                backgroundColor: 'grey.50',
-                borderRadius: 3,
+                backgroundColor: '#f8fafc',
+                borderRadius: 2,
                 '&:hover': {
-                  backgroundColor: 'grey.100',
+                  backgroundColor: '#f1f5f9',
                 },
                 '&.Mui-focused': {
                   backgroundColor: 'white',
-                  boxShadow: '0 0 0 2px rgba(102, 126, 234, 0.2)',
+                  boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.1)',
                 },
               },
             }}
@@ -130,47 +127,59 @@ const Header: React.FC = () => {
 
         {/* Notifications */}
         <IconButton 
-          color="inherit" 
           sx={{ 
-            mr: 1,
-            bgcolor: 'grey.100',
+            mr: 2,
+            color: '#64748b',
             '&:hover': {
-              bgcolor: 'grey.200',
+              backgroundColor: alpha(theme.palette.warning.main, 0.08),
             },
           }}
         >
-          <Badge badgeContent={3} color="error">
+          <Badge 
+            badgeContent={3} 
+            color="error"
+            sx={{
+              '& .MuiBadge-badge': {
+                background: 'linear-gradient(135deg, #ef4444 0%, #f87171 100%)',
+                fontWeight: 600,
+              },
+            }}
+          >
             <NotificationsIcon />
           </Badge>
         </IconButton>
 
         {/* User Profile */}
-        <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
-          <Box sx={{ display: { xs: 'none', sm: 'block' }, mr: 2, textAlign: 'right' }}>
-            <Typography variant="body2" fontWeight={600}>
-              {user?.full_name || 'System Administrator'}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {user?.role || 'Admin'}
-            </Typography>
-          </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {!isMobile && (
+            <Box sx={{ mr: 2, textAlign: 'right' }}>
+              <Typography variant="body2" fontWeight={600} color="text.primary">
+                {user?.full_name || 'System Administrator'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {user?.role || 'Admin'}
+              </Typography>
+            </Box>
+          )}
+          
           <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
             onClick={handleProfileMenuOpen}
-            color="inherit"
             sx={{
-              bgcolor: 'primary.main',
-              color: 'white',
+              p: 0.5,
               '&:hover': {
-                bgcolor: 'primary.dark',
+                backgroundColor: alpha(theme.palette.primary.main, 0.08),
               },
             }}
           >
-            <Avatar sx={{ width: 36, height: 36, bgcolor: 'transparent' }}>
+            <Avatar 
+              sx={{ 
+                width: 40, 
+                height: 40,
+                background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+                fontWeight: 600,
+                fontSize: '1rem',
+              }}
+            >
               {user?.full_name?.charAt(0) || 'S'}
             </Avatar>
           </IconButton>
@@ -190,13 +199,46 @@ const Header: React.FC = () => {
           }}
           open={Boolean(anchorEl)}
           onClose={handleProfileMenuClose}
+          PaperProps={{
+            sx: {
+              mt: 1,
+              borderRadius: 2,
+              minWidth: 200,
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+              border: '1px solid #e2e8f0',
+            },
+          }}
         >
-          <MenuItem onClick={() => { navigate('/settings'); handleProfileMenuClose(); }}>
-            <SettingsIcon sx={{ mr: 1 }} />
+          <Box sx={{ p: 2, borderBottom: '1px solid #f1f5f9' }}>
+            <Typography variant="subtitle2" fontWeight={600}>
+              {user?.full_name || 'System Administrator'}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {user?.email || 'admin@compliance.com'}
+            </Typography>
+          </Box>
+          <MenuItem 
+            onClick={() => { navigate('/settings'); handleProfileMenuClose(); }}
+            sx={{ 
+              py: 1.5,
+              '&:hover': {
+                background: alpha(theme.palette.primary.main, 0.08),
+              },
+            }}
+          >
+            <SettingsIcon sx={{ mr: 2, color: 'text.secondary' }} />
             Settings
           </MenuItem>
-          <MenuItem onClick={handleLogout}>
-            <LogoutIcon sx={{ mr: 1 }} />
+          <MenuItem 
+            onClick={handleLogout}
+            sx={{ 
+              py: 1.5,
+              '&:hover': {
+                background: alpha(theme.palette.error.main, 0.08),
+              },
+            }}
+          >
+            <LogoutIcon sx={{ mr: 2, color: 'error.main' }} />
             Logout
           </MenuItem>
         </Menu>

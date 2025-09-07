@@ -6,13 +6,13 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Divider,
   Box,
   Typography,
   useTheme,
   useMediaQuery,
-  Chip,
   Avatar,
+  Chip,
+  alpha,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -25,24 +25,79 @@ import {
   Settings as SettingsIcon,
   Person as PersonIcon,
   Business as BusinessIcon,
+  TrendingUp as TrendingUpIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import { setSidebarOpen } from '../../store/slices/uiSlice';
 
 const drawerWidth = 280;
-const collapsedWidth = 70;
+const collapsedWidth = 80;
 
 const menuItems = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard', badge: null },
-  { text: 'Clients', icon: <PeopleIcon />, path: '/clients', badge: '3' },
-  { text: 'Projects', icon: <FolderIcon />, path: '/projects', badge: '5' },
-  { text: 'Compliance', icon: <AssignmentIcon />, path: '/compliance', badge: '2' },
-  { text: 'Financial', icon: <AccountBalanceIcon />, path: '/financial', badge: null },
-  { text: 'Reports', icon: <AssessmentIcon />, path: '/reports', badge: null },
-  { text: 'Data Entry', icon: <CloudUploadIcon />, path: '/data-entry', badge: null },
-  { text: 'Users', icon: <PersonIcon />, path: '/users', badge: null },
-  { text: 'Settings', icon: <SettingsIcon />, path: '/settings', badge: null },
+  { 
+    text: 'Dashboard', 
+    icon: <DashboardIcon />, 
+    path: '/dashboard', 
+    badge: null,
+    color: '#2563eb'
+  },
+  { 
+    text: 'Clients', 
+    icon: <PeopleIcon />, 
+    path: '/clients', 
+    badge: '3',
+    color: '#7c3aed'
+  },
+  { 
+    text: 'Projects', 
+    icon: <FolderIcon />, 
+    path: '/projects', 
+    badge: '5',
+    color: '#059669'
+  },
+  { 
+    text: 'Compliance', 
+    icon: <AssignmentIcon />, 
+    path: '/compliance', 
+    badge: '2',
+    color: '#d97706'
+  },
+  { 
+    text: 'Financial', 
+    icon: <AccountBalanceIcon />, 
+    path: '/financial', 
+    badge: null,
+    color: '#dc2626'
+  },
+  { 
+    text: 'Reports', 
+    icon: <AssessmentIcon />, 
+    path: '/reports', 
+    badge: null,
+    color: '#0891b2'
+  },
+  { 
+    text: 'Data Entry', 
+    icon: <CloudUploadIcon />, 
+    path: '/data-entry', 
+    badge: null,
+    color: '#be185d'
+  },
+  { 
+    text: 'Users', 
+    icon: <PersonIcon />, 
+    path: '/users', 
+    badge: null,
+    color: '#65a30d'
+  },
+  { 
+    text: 'Settings', 
+    icon: <SettingsIcon />, 
+    path: '/settings', 
+    badge: null,
+    color: '#64748b'
+  },
 ];
 
 const Sidebar: React.FC = () => {
@@ -61,16 +116,18 @@ const Sidebar: React.FC = () => {
   };
 
   const drawer = (
-    <Box sx={{ 
-      height: '100%', 
-      display: 'flex', 
-      flexDirection: 'column',
-      background: sidebarOpen 
-        ? 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)' 
-        : 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-    }}>
-      {/* Logo */}
+    <Box
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        background: 'linear-gradient(180deg, #1e293b 0%, #334155 100%)',
+        color: 'white',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Logo Section */}
       <Box
         sx={{
           p: 3,
@@ -78,40 +135,53 @@ const Sidebar: React.FC = () => {
           alignItems: 'center',
           justifyContent: sidebarOpen ? 'flex-start' : 'center',
           minHeight: 80,
-          textAlign: 'center',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
         }}
       >
         <Avatar
           sx={{
             width: sidebarOpen ? 48 : 40,
             height: sidebarOpen ? 48 : 40,
-            bgcolor: 'rgba(255,255,255,0.2)',
-            backdropFilter: 'blur(10px)',
+            background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
             mr: sidebarOpen ? 2 : 0,
+            boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
           }}
         >
-          <BusinessIcon sx={{ fontSize: sidebarOpen ? 28 : 24 }} />
+          <BusinessIcon sx={{ fontSize: sidebarOpen ? 24 : 20 }} />
         </Avatar>
         {sidebarOpen && (
           <Box>
-            <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+            <Typography 
+              variant="h6" 
+              component="div" 
+              fontWeight={700}
+              sx={{ mb: 0.5 }}
+            >
               CA Compliance
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8, fontSize: '0.75rem' }}>
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                opacity: 0.8,
+                fontSize: '0.75rem',
+              }}
+            >
               Management System
             </Typography>
           </Box>
         )}
       </Box>
 
-      <Divider sx={{ borderColor: 'rgba(255,255,255,0.2)' }} />
-
       {/* Menu Items */}
       <List sx={{ flexGrow: 1, pt: 2, px: 1 }}>
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
-            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
+            <ListItem 
+              key={item.text} 
+              disablePadding 
+              sx={{ mb: 0.5 }}
+            >
               <ListItemButton
                 onClick={() => handleItemClick(item.path)}
                 sx={{
@@ -119,12 +189,19 @@ const Sidebar: React.FC = () => {
                   borderRadius: 2,
                   justifyContent: sidebarOpen ? 'flex-start' : 'center',
                   px: sidebarOpen ? 2 : 1.5,
-                  transition: 'all 0.3s ease',
-                  bgcolor: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
+                  py: 1,
+                  position: 'relative',
+                  background: isActive 
+                    ? `linear-gradient(135deg, ${alpha(item.color, 0.2)} 0%, ${alpha(item.color, 0.1)} 100%)`
+                    : 'transparent',
+                  border: isActive 
+                    ? `1px solid ${alpha(item.color, 0.3)}`
+                    : '1px solid transparent',
                   '&:hover': {
-                    bgcolor: 'rgba(255,255,255,0.1)',
+                    background: `rgba(255, 255, 255, 0.08)`,
                     transform: 'translateX(4px)',
                   },
+                  transition: 'all 0.2s ease',
                 }}
               >
                 <ListItemIcon
@@ -132,7 +209,7 @@ const Sidebar: React.FC = () => {
                     minWidth: 0,
                     mr: sidebarOpen ? 2 : 'auto',
                     justifyContent: 'center',
-                    color: 'white',
+                    color: isActive ? item.color : 'rgba(255, 255, 255, 0.8)',
                   }}
                 >
                   {item.icon}
@@ -144,7 +221,8 @@ const Sidebar: React.FC = () => {
                       sx={{
                         '& .MuiListItemText-primary': {
                           fontSize: '0.9rem',
-                          fontWeight: isActive ? 600 : 400,
+                          fontWeight: isActive ? 600 : 500,
+                          color: isActive ? 'white' : 'rgba(255, 255, 255, 0.9)',
                         },
                       }}
                     />
@@ -153,11 +231,12 @@ const Sidebar: React.FC = () => {
                         label={item.badge}
                         size="small"
                         sx={{
-                          bgcolor: 'rgba(255,255,255,0.2)',
+                          background: item.color,
                           color: 'white',
                           fontSize: '0.7rem',
                           height: 20,
                           minWidth: 20,
+                          fontWeight: 600,
                         }}
                       />
                     )}
@@ -168,6 +247,33 @@ const Sidebar: React.FC = () => {
           );
         })}
       </List>
+
+      {/* Bottom Stats */}
+      {sidebarOpen && (
+        <Box sx={{ p: 2, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <TrendingUpIcon sx={{ color: '#10b981', mr: 1, fontSize: 18 }} />
+              <Typography variant="body2" fontWeight={600}>
+                Performance
+              </Typography>
+            </Box>
+            <Typography variant="h6" fontWeight={700} color="#10b981">
+              +12.5%
+            </Typography>
+            <Typography variant="caption" sx={{ opacity: 0.8 }}>
+              This month
+            </Typography>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 
@@ -182,9 +288,9 @@ const Sidebar: React.FC = () => {
         '& .MuiDrawer-paper': {
           width: sidebarOpen ? drawerWidth : collapsedWidth,
           boxSizing: 'border-box',
-          transition: 'width 0.3s ease',
+          transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           borderRight: 'none',
-          boxShadow: '0 0 20px rgba(0,0,0,0.1)',
+          boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)',
         },
       }}
     >

@@ -1,193 +1,236 @@
 import React, { useState } from 'react';
 import {
-  Paper,
+  Box,
+  Typography,
   TextField,
   Button,
-  Typography,
-  Box,
-  Alert,
-  CircularProgress,
   InputAdornment,
   IconButton,
+  Alert,
+  Container,
+  Paper,
+  Avatar,
+  useTheme,
+  alpha,
+  Fade,
 } from '@mui/material';
 import {
   Visibility,
   VisibilityOff,
-  Business as BusinessIcon,
+  Business,
+  Email,
+  Lock,
+  ArrowForward,
 } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/redux';
 import { login } from '../../store/slices/authSlice';
 
 const Login: React.FC = () => {
+  const theme = useTheme();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector((state) => state.auth);
-
-  const [formData, setFormData] = useState({
+  const [showPassword, setShowPassword] = useState(false);
+  const [credentials, setCredentials] = useState({
     username: '',
     password: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(login(formData));
+    setLoading(true);
+    setError(null);
+
+    try {
+      await dispatch(login(credentials)).unwrap();
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(typeof err === 'string' ? err : 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCredentials(prev => ({ ...prev, [field]: e.target.value }));
   };
 
   return (
     <Box
       sx={{
         minHeight: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        p: { xs: 1, sm: 2, md: 3 },
+        padding: 2,
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      <Paper
-        elevation={10}
+      {/* Animated Background Elements */}
+      <Box
         sx={{
-          p: { xs: 2, sm: 3, md: 4 },
-          width: '100%',
-          maxWidth: { xs: '100%', sm: 400, md: 450 },
-          borderRadius: { xs: 1, sm: 2 },
-          mx: { xs: 1, sm: 0 },
+          position: 'absolute',
+          top: -50,
+          right: -50,
+          width: 200,
+          height: 200,
+          borderRadius: '50%',
+          background: 'rgba(255, 255, 255, 0.1)',
+          animation: 'float 6s ease-in-out infinite',
         }}
-      >
-        <Box sx={{ textAlign: 'center', mb: { xs: 3, sm: 4 } }}>
-          <BusinessIcon sx={{ 
-            fontSize: { xs: 40, sm: 48 }, 
-            color: 'primary.main', 
-            mb: { xs: 1, sm: 2 } 
-          }} />
-          <Typography 
-            variant="h4" 
-            component="h1" 
-            gutterBottom
-            sx={{ fontSize: { xs: '1.75rem', sm: '2.125rem' } }}
-          >
-            CA Compliance
-          </Typography>
-          <Typography 
-            variant="body1" 
-            color="text.secondary"
-            sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
-          >
-            Sign in to your account
-          </Typography>
-        </Box>
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: -100,
+          left: -100,
+          width: 300,
+          height: 300,
+          borderRadius: '50%',
+          background: 'rgba(255, 255, 255, 0.05)',
+          animation: 'float 8s ease-in-out infinite reverse',
+        }}
+      />
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 3 }}>
-            {typeof error === 'string' ? error : JSON.stringify(error)}
-          </Alert>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label="Username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            margin="normal"
-            required
-            autoFocus
-            disabled={isLoading}
-            size="medium"
+      <Container maxWidth="sm">
+        <Fade in timeout={1000}>
+          <Paper
+            elevation={24}
             sx={{
-              '& .MuiOutlinedInput-root': {
-                fontSize: { xs: '0.875rem', sm: '1rem' },
-              },
-            }}
-          />
-
-          <TextField
-            fullWidth
-            label="Password"
-            name="password"
-            type={showPassword ? 'text' : 'password'}
-            value={formData.password}
-            onChange={handleChange}
-            margin="normal"
-            required
-            disabled={isLoading}
-            size="medium"
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                fontSize: { xs: '0.875rem', sm: '1rem' },
-              },
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleTogglePasswordVisibility}
-                    edge="end"
-                    size="small"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            size="large"
-            disabled={isLoading}
-            sx={{ 
-              mt: { xs: 2, sm: 3 }, 
-              mb: { xs: 1, sm: 2 }, 
-              py: { xs: 1.2, sm: 1.5 },
-              fontSize: { xs: '0.875rem', sm: '1rem' },
-              fontWeight: 600,
+              p: { xs: 3, sm: 4, md: 5 },
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
-            {isLoading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              'Sign In'
-            )}
-          </Button>
-        </form>
+            {/* Header */}
+            <Box sx={{ textAlign: 'center', mb: 4 }}>
+              <Avatar
+                sx={{
+                  width: 80,
+                  height: 80,
+                  mx: 'auto',
+                  mb: 3,
+                  background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+                  boxShadow: '0 8px 32px rgba(37, 99, 235, 0.3)',
+                }}
+              >
+                <Business sx={{ fontSize: 40 }} />
+              </Avatar>
+              <Typography
+                variant="h3"
+                component="h1"
+                fontWeight={800}
+                sx={{
+                  background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  mb: 1,
+                }}
+              >
+                CA Compliance
+              </Typography>
+              <Typography variant="h6" color="text.secondary" fontWeight={500}>
+                Welcome back! Please sign in to continue
+              </Typography>
+            </Box>
 
-        <Box sx={{ textAlign: 'center', mt: { xs: 2, sm: 3 } }}>
-          <Typography 
-            variant="body2" 
-            color="text.secondary"
-            sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
-          >
-            Demo Credentials:
-          </Typography>
-          <Typography 
-            variant="body2" 
-            color="text.secondary"
-            sx={{ 
-              fontSize: { xs: '0.75rem', sm: '0.875rem' },
-              wordBreak: 'break-all',
-              mt: 0.5,
-            }}
-          >
-            Username: admin | Password: admin123
-          </Typography>
-        </Box>
-      </Paper>
+            {/* Login Form */}
+            <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+              {error && (
+                <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+                  {error}
+                </Alert>
+              )}
+
+              <TextField
+                fullWidth
+                label="Username"
+                value={credentials.username}
+                onChange={handleChange('username')}
+                required
+                sx={{ mb: 3 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email color="action" />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              <TextField
+                fullWidth
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                value={credentials.password}
+                onChange={handleChange('password')}
+                required
+                sx={{ mb: 4 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock color="action" />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                size="large"
+                disabled={loading}
+                endIcon={<ArrowForward />}
+                sx={{
+                  py: 1.5,
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  mb: 3,
+                }}
+              >
+                {loading ? 'Signing in...' : 'Sign In'}
+              </Button>
+            </Box>
+
+            {/* Demo Credentials */}
+            <Box
+              sx={{
+                p: 3,
+                borderRadius: 2,
+                background: alpha(theme.palette.primary.main, 0.05),
+                border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+              }}
+            >
+              <Typography variant="body2" color="text.secondary" fontWeight={600} gutterBottom>
+                Demo Credentials:
+              </Typography>
+              <Typography variant="body2" color="text.primary" fontFamily="monospace">
+                Username: <strong>admin</strong> | Password: <strong>admin123</strong>
+              </Typography>
+            </Box>
+          </Paper>
+        </Fade>
+      </Container>
     </Box>
   );
 };

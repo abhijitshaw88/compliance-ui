@@ -8,7 +8,7 @@ import Login from './pages/Auth/Login';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Clients from './pages/Clients/Clients';
 import Projects from './pages/Projects/Projects';
-import Compliance from './pages/Compliance/Compliance';
+// import Compliance from './pages/Compliance/Compliance';
 import Financial from './pages/Financial/Financial';
 import Reports from './pages/Reports/Reports';
 import Settings from './pages/Settings/Settings';
@@ -33,7 +33,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/clients" element={<Clients />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/compliance" element={<Compliance />} />
+        {/* <Route path="/compliance" element={<Compliance />} /> */}
         <Route path="/financial" element={<Financial />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/data-entry" element={<DataEntry />} />
