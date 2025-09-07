@@ -57,46 +57,83 @@ const theme = createTheme({
       fontSize: '2.5rem',
       fontWeight: 800,
       lineHeight: 1.1,
-      letterSpacing: '-0.025em',
+      letterSpacing: '-0.04em',
+      fontFamily: '"Inter", sans-serif',
     },
     h2: {
       fontSize: '2rem',
       fontWeight: 700,
       lineHeight: 1.2,
-      letterSpacing: '-0.025em',
+      letterSpacing: '-0.03em',
+      fontFamily: '"Inter", sans-serif',
     },
     h3: {
       fontSize: '1.5rem',
-      fontWeight: 600,
+      fontWeight: 700,
       lineHeight: 1.3,
-      letterSpacing: '-0.025em',
+      letterSpacing: '-0.02em',
+      fontFamily: '"Inter", sans-serif',
     },
     h4: {
       fontSize: '1.25rem',
       fontWeight: 600,
-      lineHeight: 1.4,
+      lineHeight: 1.3,
+      letterSpacing: '-0.02em',
+      fontFamily: '"Inter", sans-serif',
     },
     h5: {
       fontSize: '1.125rem',
       fontWeight: 600,
       lineHeight: 1.4,
+      letterSpacing: '-0.01em',
+      fontFamily: '"Inter", sans-serif',
     },
     h6: {
       fontSize: '1rem',
       fontWeight: 600,
       lineHeight: 1.4,
+      letterSpacing: '-0.01em',
+      fontFamily: '"Inter", sans-serif',
+    },
+    subtitle1: {
+      fontSize: '1rem',
+      fontWeight: 500,
+      lineHeight: 1.4,
+      letterSpacing: '-0.01em',
+      fontFamily: '"Inter", sans-serif',
+    },
+    subtitle2: {
+      fontSize: '0.875rem',
+      fontWeight: 600,
+      lineHeight: 1.3,
+      letterSpacing: '0.025em',
+      fontFamily: '"Inter", sans-serif',
     },
     body1: {
       fontSize: '1rem',
-      lineHeight: 1.6,
+      fontWeight: 400,
+      lineHeight: 1.5,
+      letterSpacing: '-0.01em',
+      fontFamily: '"Inter", sans-serif',
     },
     body2: {
       fontSize: '0.875rem',
-      lineHeight: 1.6,
+      fontWeight: 400,
+      lineHeight: 1.5,
+      letterSpacing: '-0.01em',
+      fontFamily: '"Inter", sans-serif',
+    },
+    caption: {
+      fontSize: '0.75rem',
+      fontWeight: 500,
+      lineHeight: 1.3,
+      letterSpacing: '0.025em',
+      fontFamily: '"Inter", sans-serif',
     },
     button: {
       fontWeight: 600,
       textTransform: 'none',
+      fontFamily: '"Inter", sans-serif',
     },
   },
   shape: {
@@ -112,6 +149,8 @@ const theme = createTheme({
           fontFamily: '"Inter", "SF Pro Display", "Roboto", "Helvetica", "Arial", sans-serif',
           backgroundColor: '#f8fafc',
           overflowX: 'hidden',
+          fontFeatureSettings: '"cv02", "cv03", "cv04", "cv11"',
+          letterSpacing: '-0.01em',
         },
         '*': {
           boxSizing: 'border-box',
@@ -164,14 +203,25 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 20,
+          borderRadius: 12,
           boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
           border: '1px solid rgba(226, 232, 240, 0.8)',
+          fontFamily: '"Inter", sans-serif',
           '&:hover': {
-            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)',
-            transform: 'translateY(-2px)',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)',
+            transform: 'translateY(-1px)',
           },
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s ease-in-out',
+        },
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          padding: '20px',
+          '&:last-child': {
+            paddingBottom: '20px',
+          },
         },
       },
     },
@@ -258,8 +308,12 @@ const theme = createTheme({
             backgroundColor: '#f8fafc',
             fontWeight: 600,
             fontSize: '0.875rem',
-            color: '#374151',
-            borderBottom: '2px solid #e5e7eb',
+            letterSpacing: '0.025em',
+            textTransform: 'uppercase',
+            color: '#64748b',
+            borderBottom: '2px solid #e2e8f0',
+            padding: '16px 12px',
+            fontFamily: '"Inter", sans-serif',
           },
         },
       },
@@ -267,8 +321,14 @@ const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          borderBottom: '1px solid #f3f4f6',
-          padding: '16px',
+          borderBottom: '1px solid #f1f5f9',
+          padding: '12px',
+          fontFamily: '"Inter", sans-serif',
+          fontWeight: 500,
+          fontSize: '0.875rem',
+          letterSpacing: '-0.01em',
+          lineHeight: 1.4,
+          color: '#1e293b',
         },
       },
     },
@@ -277,6 +337,9 @@ const theme = createTheme({
         root: {
           '&:hover': {
             backgroundColor: '#f8fafc',
+            '& .MuiTableCell-root': {
+              color: '#0f172a',
+            },
           },
           '&:last-child td': {
             borderBottom: 0,

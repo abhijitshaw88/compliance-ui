@@ -34,6 +34,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           overflow: 'hidden',
           marginLeft: isMobile ? 0 : sidebarOpen ? '280px' : '80px',
           transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          width: isMobile ? '100%' : `calc(100% - ${sidebarOpen ? '280px' : '80px'})`,
         }}
       >
         {/* Header */}
@@ -46,6 +47,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             overflow: 'auto',
             backgroundColor: '#f8fafc',
             padding: { xs: 2, sm: 3, md: 4 },
+            paddingTop: { xs: 1, sm: 2, md: 3 }, // Reduced top padding for better spacing
           }}
         >
           {children}

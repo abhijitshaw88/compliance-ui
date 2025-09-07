@@ -222,14 +222,14 @@ const Dashboard: React.FC = () => {
           </Box>
         </Box>
 
-        <Typography variant="h4" fontWeight={800} color="text.primary" gutterBottom>
+        <Typography variant="h4" className="card-value-large" color="text.primary" gutterBottom>
           {value}
         </Typography>
-        <Typography variant="body1" color="text.secondary" gutterBottom sx={{ mb: 2 }}>
+        <Typography variant="body1" className="card-title" color="text.secondary" gutterBottom sx={{ mb: 2 }}>
           {title}
         </Typography>
         {subtitle && (
-          <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+          <Typography variant="caption" className="card-subtitle" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
             {subtitle}
           </Typography>
         )}
@@ -243,13 +243,14 @@ const Dashboard: React.FC = () => {
             )}
             <Typography
               variant="body2"
+              className="table-cell"
               color={change > 0 ? 'success.main' : 'error.main'}
               fontWeight={600}
             >
               {Math.abs(change)}%
             </Typography>
           </Box>
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="caption" className="table-cell" color="text.secondary">
             vs last month
           </Typography>
         </Box>

@@ -707,17 +707,17 @@ const Financial: React.FC = () => {
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <TrendingUpIcon color="success" sx={{ mr: 1 }} />
-                <Typography variant="h6">Total Revenue</Typography>
+                <Typography variant="h6" className="card-title">Total Revenue</Typography>
               </Box>
-              <Typography variant="h4" color="success.main" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h4" color="success.main" className="card-value-large">
                 ₹{totalRevenue.toLocaleString()}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              <Typography variant="body2" color="text.secondary" className="card-subtitle" sx={{ mb: 1 }}>
                 FY 2023-24
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <TrendingUpIcon sx={{ fontSize: 16, color: 'success.main', mr: 0.5 }} />
-                <Typography variant="caption" color="success.main">
+                <Typography variant="caption" color="success.main" className="table-cell">
                   +12.5% from last year
                 </Typography>
               </Box>
@@ -733,17 +733,17 @@ const Financial: React.FC = () => {
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <AccountBalanceIcon color="warning" sx={{ mr: 1 }} />
-                <Typography variant="h6">Outstanding</Typography>
+                <Typography variant="h6" className="card-title">Outstanding</Typography>
               </Box>
-              <Typography variant="h4" color="warning.main" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h4" color="warning.main" className="card-value-large">
                 ₹{totalOutstanding.toLocaleString()}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              <Typography variant="body2" color="text.secondary" className="card-subtitle" sx={{ mb: 1 }}>
                 {invoices.filter(i => ['sent', 'overdue'].includes(i.status)).length} invoices
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <WarningIcon sx={{ fontSize: 16, color: 'warning.main', mr: 0.5 }} />
-                <Typography variant="caption" color="warning.main">
+                <Typography variant="caption" color="warning.main" className="table-cell">
                   {invoices.filter(i => i.status === 'overdue').length} overdue
                 </Typography>
               </Box>
@@ -759,17 +759,17 @@ const Financial: React.FC = () => {
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <PaymentIcon color="info" sx={{ mr: 1 }} />
-                <Typography variant="h6">This Month</Typography>
+                <Typography variant="h6" className="card-title">This Month</Typography>
               </Box>
-              <Typography variant="h4" color="info.main" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h4" color="info.main" className="card-value-large">
                 ₹{totalPending.toLocaleString()}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              <Typography variant="body2" color="text.secondary" className="card-subtitle" sx={{ mb: 1 }}>
                 Pending payments
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ScheduleIcon sx={{ fontSize: 16, color: 'info.main', mr: 0.5 }} />
-                <Typography variant="caption" color="info.main">
+                <Typography variant="caption" color="info.main" className="table-cell">
                   {invoices.filter(i => i.status === 'sent').length} sent invoices
                 </Typography>
               </Box>
@@ -785,17 +785,17 @@ const Financial: React.FC = () => {
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <ReceiptIcon color="error" sx={{ mr: 1 }} />
-                <Typography variant="h6">Overdue</Typography>
+                <Typography variant="h6" className="card-title">Overdue</Typography>
               </Box>
-              <Typography variant="h4" color="error.main" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h4" color="error.main" className="card-value-large">
                 ₹{totalOverdue.toLocaleString()}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              <Typography variant="body2" color="text.secondary" className="card-subtitle" sx={{ mb: 1 }}>
                 {invoices.filter(i => i.status === 'overdue').length} invoices
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <WarningIcon sx={{ fontSize: 16, color: 'error.main', mr: 0.5 }} />
-                <Typography variant="caption" color="error.main">
+                <Typography variant="caption" color="error.main" className="table-cell">
                   Requires immediate attention
                 </Typography>
               </Box>
@@ -945,84 +945,88 @@ const Financial: React.FC = () => {
 
             {/* Enhanced Invoice Table */}
             {viewMode === 'table' && (
-              <TableContainer>
+              <TableContainer sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
                 <Table>
                   <TableHead>
-                    <TableRow>
-                      <TableCell>Invoice #</TableCell>
-                      <TableCell>Client</TableCell>
-                      <TableCell>Amount</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell>Priority</TableCell>
-                      <TableCell>Issue Date</TableCell>
-                      <TableCell>Due Date</TableCell>
-                      <TableCell>Actions</TableCell>
+                    <TableRow sx={{ backgroundColor: '#f8fafc' }}>
+                      <TableCell className="table-header">Invoice #</TableCell>
+                      <TableCell className="table-header">Client</TableCell>
+                      <TableCell className="table-header">Amount</TableCell>
+                      <TableCell className="table-header">Status</TableCell>
+                      <TableCell className="table-header">Priority</TableCell>
+                      <TableCell className="table-header">Issue Date</TableCell>
+                      <TableCell className="table-header">Due Date</TableCell>
+                      <TableCell className="table-header">Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {sortedInvoices.map((invoice) => (
                       <TableRow key={invoice.id} hover>
-                        <TableCell>
+                        <TableCell className="table-cell">
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <ReceiptIcon sx={{ mr: 1, color: 'text.secondary' }} />
+                            <ReceiptIcon sx={{ mr: 1, color: 'text.secondary', fontSize: 18 }} />
                             <Box>
-                              <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                              <Typography variant="subtitle2" className="table-cell-mono" sx={{ fontWeight: 'bold' }}>
                                 {invoice.invoiceNumber}
                               </Typography>
-                              <Typography variant="caption" color="text.secondary">
+                              <Typography variant="caption" color="text.secondary" className="table-cell">
                                 {invoice.items.length} items
                               </Typography>
                             </Box>
                           </Box>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="table-cell">
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Avatar sx={{ width: 32, height: 32, mr: 1 }}>
+                            <Avatar sx={{ width: 32, height: 32, mr: 1, fontSize: '0.875rem', fontWeight: 600 }}>
                               {invoice.client.name.charAt(0)}
                             </Avatar>
                             <Box>
-                              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                              <Typography variant="body2" className="table-cell" sx={{ fontWeight: 'bold' }}>
                                 {invoice.client.name}
                               </Typography>
-                              <Typography variant="caption" color="text.secondary">
+                              <Typography variant="caption" color="text.secondary" className="table-cell">
                                 {invoice.client.email}
                               </Typography>
                             </Box>
                           </Box>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="table-cell">
                           <Box>
-                            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                            <Typography variant="body2" className="amount-text" sx={{ fontWeight: 'bold' }}>
                               ₹{invoice.total.toLocaleString()}
                             </Typography>
-                            <Typography variant="caption" color="text.secondary">
+                            <Typography variant="caption" color="text.secondary" className="table-cell">
                               Tax: ₹{invoice.tax.toLocaleString()}
                             </Typography>
                           </Box>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="table-cell">
                           <Chip
                             icon={getStatusIcon(invoice.status)}
                             label={invoice.status.toUpperCase()}
                             color={getStatusColor(invoice.status) as any}
                             size="small"
+                            className="status-chip"
+                            sx={{ fontFamily: 'Inter', fontWeight: 600 }}
                           />
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="table-cell">
                           <Chip
                             label={invoice.priority.toUpperCase()}
                             color={getPriorityColor(invoice.priority) as any}
                             size="small"
                             variant="outlined"
+                            className="priority-chip"
+                            sx={{ fontFamily: 'Inter', fontWeight: 600 }}
                           />
                         </TableCell>
-                        <TableCell>
-                          <Typography variant="body2">
+                        <TableCell className="table-cell">
+                          <Typography variant="body2" className="table-cell-mono">
                             {new Date(invoice.issueDate).toLocaleDateString()}
                           </Typography>
                         </TableCell>
-                        <TableCell>
-                          <Typography variant="body2">
+                        <TableCell className="table-cell">
+                          <Typography variant="body2" className="table-cell-mono">
                             {new Date(invoice.dueDate).toLocaleDateString()}
                           </Typography>
                         </TableCell>

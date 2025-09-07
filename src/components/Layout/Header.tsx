@@ -64,10 +64,11 @@ const Header: React.FC = () => {
         background: 'white',
         borderBottom: '1px solid #e2e8f0',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-        height: 72,
+        height: 64, // Reduced height for better spacing
+        marginBottom: 1, // Add margin for better separation
       }}
     >
-      <Toolbar sx={{ height: 72, px: { xs: 2, sm: 3 } }}>
+      <Toolbar sx={{ height: 64, px: { xs: 2, sm: 3 } }}>
         {/* Menu Button */}
         <IconButton
           edge="start"
