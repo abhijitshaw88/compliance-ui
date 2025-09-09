@@ -604,55 +604,135 @@ const Financial: React.FC = () => {
   const sortedInvoices: any[] = [];
 
   return (
-    <Box>
+    <Box className="fade-in">
       {/* Enhanced Header */}
       <Box sx={{ 
-        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-        borderRadius: 2,
-        p: 3,
-        mb: 3,
-        color: 'white',
+        backgroundColor: '#ffffff',
+        borderRadius: 4,
+        p: 4,
+        mb: 4,
+        color: '#0f172a',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '3px',
+          background: 'linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%)',
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%)',
+          pointerEvents: 'none',
+        },
       }}>
         <Box sx={{ position: 'relative', zIndex: 1 }}>
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mb: 1 }}>
+          <Typography 
+            variant="h2" 
+            component="h1" 
+            className="card-title"
+            sx={{ 
+              fontWeight: 900, 
+              mb: 2,
+              color: '#0f172a',
+            }}
+          >
             Financial Management
           </Typography>
-          <Typography variant="body1" sx={{ opacity: 0.9, mb: 2 }}>
+          <Typography 
+            variant="h6" 
+            className="card-subtitle"
+            sx={{ 
+              opacity: 0.9, 
+              mb: 3,
+              color: '#64748b',
+              fontWeight: 500,
+            }}
+          >
             Comprehensive invoice management, payment tracking, and financial reporting
           </Typography>
           
           {/* Quick Stats */}
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 3 }}>
             <Chip 
               label={`₹${totalRevenue.toLocaleString()} Revenue`} 
-              sx={{ bgcolor: alpha(theme.palette.common.white, 0.2), color: 'white' }}
+              className="status-chip"
+              sx={{ 
+                background: 'rgba(16, 185, 129, 0.2)',
+                color: '#10b981',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                fontWeight: 700,
+              }}
             />
             <Chip 
               label={`₹${totalOutstanding.toLocaleString()} Outstanding`} 
-              sx={{ bgcolor: alpha(theme.palette.warning.main, 0.3), color: 'white' }}
+              className="status-chip"
+              sx={{ 
+                background: 'rgba(245, 158, 11, 0.2)',
+                color: '#f59e0b',
+                border: '1px solid rgba(245, 158, 11, 0.3)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                fontWeight: 700,
+              }}
             />
             <Chip 
               label={`₹${totalOverdue.toLocaleString()} Overdue`} 
-              sx={{ bgcolor: alpha(theme.palette.error.main, 0.3), color: 'white' }}
+              className="status-chip"
+              sx={{ 
+                background: 'rgba(239, 68, 68, 0.2)',
+                color: '#ef4444',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                fontWeight: 700,
+              }}
             />
             <Chip 
               label={`${invoices.length} Total Invoices`} 
-              sx={{ bgcolor: alpha(theme.palette.info.main, 0.3), color: 'white' }}
+              className="status-chip"
+              sx={{ 
+                background: 'rgba(99, 102, 241, 0.2)',
+                color: '#6366f1',
+                border: '1px solid rgba(99, 102, 241, 0.3)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                fontWeight: 700,
+              }}
             />
           </Box>
 
           {/* Action Buttons */}
-          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
               onClick={handleCreateInvoice}
+              className="hover-lift"
               sx={{ 
-                bgcolor: 'white', 
-                color: theme.palette.primary.main,
-                '&:hover': { bgcolor: alpha(theme.palette.common.white, 0.9) }
+                borderRadius: 3,
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                boxShadow: '0 8px 32px rgba(99, 102, 241, 0.3)',
+                color: 'white',
+                fontWeight: 700,
+                px: 4,
+                py: 2,
+                '&:hover': { 
+                  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                  boxShadow: '0 12px 40px rgba(99, 102, 241, 0.4)',
+                }
               }}
             >
               Create Invoice
@@ -662,10 +742,22 @@ const Financial: React.FC = () => {
               startIcon={<RefreshIcon />}
               onClick={handleRefresh}
               disabled={refreshing}
+              className="hover-lift"
               sx={{ 
-                borderColor: 'white', 
-                color: 'white',
-                '&:hover': { borderColor: 'white', bgcolor: alpha(theme.palette.common.white, 0.1) }
+                borderRadius: 2,
+                backgroundColor: 'transparent',
+                border: '1px solid #e2e8f0',
+                color: '#0f172a',
+                fontWeight: 500,
+                '&:hover': { 
+                  backgroundColor: '#f8fafc',
+                  borderColor: '#cbd5e1',
+                },
+                '&:disabled': {
+                  backgroundColor: '#f1f5f9',
+                  color: '#94a3b8',
+                  border: '1px solid #e2e8f0',
+                }
               }}
             >
               {refreshing ? 'Refreshing...' : 'Refresh'}
@@ -673,10 +765,19 @@ const Financial: React.FC = () => {
             <Button
               variant="outlined"
               startIcon={<DownloadIcon />}
+              className="hover-lift"
               sx={{ 
-                borderColor: 'white', 
+                borderRadius: 3,
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
                 color: 'white',
-                '&:hover': { borderColor: 'white', bgcolor: alpha(theme.palette.common.white, 0.1) }
+                fontWeight: 600,
+                '&:hover': { 
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  border: '2px solid rgba(255, 255, 255, 0.5)',
+                }
               }}
             >
               Export

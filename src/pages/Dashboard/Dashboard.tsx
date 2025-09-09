@@ -182,27 +182,47 @@ const Dashboard: React.FC = () => {
 
   const StatCard = ({ title, value, change, icon, color, subtitle, trend }: any) => (
     <Card
+      className="card-hover"
       sx={{
         height: '100%',
-        background: `linear-gradient(135deg, ${alpha(color, 0.1)} 0%, ${alpha(color, 0.05)} 100%)`,
-        border: `1px solid ${alpha(color, 0.2)}`,
+        backgroundColor: '#ffffff',
+        border: '1px solid #e2e8f0',
         position: 'relative',
         overflow: 'hidden',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: `0 8px 25px ${alpha(color, 0.15)}`,
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '3px',
+          background: `linear-gradient(90deg, ${color} 0%, ${alpha(color, 0.5)} 100%)`,
         },
-        transition: 'all 0.3s ease',
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `linear-gradient(135deg, ${alpha(color, 0.1)} 0%, transparent 100%)`,
+          pointerEvents: 'none',
+        },
       }}
     >
-      <CardContent sx={{ p: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+      <CardContent sx={{ p: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
           <Avatar
             sx={{
-              width: 48,
-              height: 48,
-              background: `linear-gradient(135deg, ${color} 0%, ${alpha(color, 0.8)} 100%)`,
+              width: 56,
+              height: 56,
+              backgroundColor: color,
               boxShadow: `0 4px 12px ${alpha(color, 0.3)}`,
+              '&:hover': {
+                transform: 'scale(1.1)',
+                boxShadow: `0 12px 35px ${alpha(color, 0.5)}`,
+              },
+              transition: 'all 0.3s ease',
             }}
           >
             {icon}
@@ -212,24 +232,69 @@ const Dashboard: React.FC = () => {
               <Chip
                 label={trend}
                 size="small"
-                color={trend === 'Up' ? 'success' : 'error'}
-                sx={{ fontSize: '0.7rem' }}
+                sx={{
+                  backgroundColor: trend === 'Up' ? '#10b981' : '#ef4444',
+                  color: 'white',
+                  fontWeight: 600,
+                  fontSize: '0.8rem',
+                  height: 24,
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                }}
               />
             )}
-            <IconButton size="small" sx={{ color: 'text.secondary' }}>
+            <IconButton 
+              size="small" 
+              sx={{ 
+                color: '#64748b',
+                backgroundColor: 'transparent',
+                '&:hover': {
+                  backgroundColor: '#f8fafc',
+                  color: '#0f172a',
+                },
+              }}
+            >
               <MoreVert />
             </IconButton>
           </Box>
         </Box>
 
-        <Typography variant="h4" className="card-value-large" color="text.primary" gutterBottom>
+        <Typography 
+          variant="h3" 
+          className="card-value-large"
+          sx={{ 
+            fontWeight: 800, 
+            mb: 2, 
+            color: '#1e293b',
+            textShadow: 'none',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
           {value}
         </Typography>
-        <Typography variant="body1" className="card-title" color="text.secondary" gutterBottom sx={{ mb: 2 }}>
+        <Typography 
+          variant="h6" 
+          className="card-title"
+          sx={{ 
+            color: '#1e293b',
+            textShadow: 'none',
+            fontWeight: 600,
+            mb: 2,
+          }}
+        >
           {title}
         </Typography>
         {subtitle && (
-          <Typography variant="caption" className="card-subtitle" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+          <Typography 
+            variant="body2" 
+            className="card-subtitle"
+            sx={{ 
+              color: '#64748b',
+              display: 'block',
+              mb: 2,
+            }}
+          >
             {subtitle}
           </Typography>
         )}
@@ -237,20 +302,38 @@ const Dashboard: React.FC = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {change > 0 ? (
-              <ArrowUpward sx={{ color: 'success.main', fontSize: 18, mr: 0.5 }} />
+              <ArrowUpward sx={{ 
+                color: 'success.main', 
+                fontSize: 20, 
+                mr: 0.5,
+                filter: 'drop-shadow(0 2px 4px rgba(76, 175, 80, 0.3))',
+              }} />
             ) : (
-              <ArrowDownward sx={{ color: 'error.main', fontSize: 18, mr: 0.5 }} />
+              <ArrowDownward sx={{ 
+                color: 'error.main', 
+                fontSize: 20, 
+                mr: 0.5,
+                filter: 'drop-shadow(0 2px 4px rgba(244, 67, 54, 0.3))',
+              }} />
             )}
             <Typography
               variant="body2"
-              className="table-cell"
-              color={change > 0 ? 'success.main' : 'error.main'}
-              fontWeight={600}
+              className="status-chip"
+              sx={{
+                color: change > 0 ? 'success.main' : 'error.main',
+                fontWeight: 700,
+              }}
             >
               {Math.abs(change)}%
             </Typography>
           </Box>
-          <Typography variant="caption" className="table-cell" color="text.secondary">
+          <Typography 
+            variant="caption" 
+            className="card-subtitle"
+            sx={{ 
+              color: '#64748b',
+            }}
+          >
             vs last month
           </Typography>
         </Box>
@@ -261,14 +344,17 @@ const Dashboard: React.FC = () => {
   const QuickActionButton = ({ icon, label, color, onClick }: any) => (
     <Tooltip title={label}>
       <Fab
-        size="medium"
+        size="large"
+        className="hover-lift"
         sx={{
-          background: `linear-gradient(135deg, ${color} 0%, ${alpha(color, 0.8)} 100%)`,
+          backgroundColor: color,
           color: 'white',
           boxShadow: `0 4px 12px ${alpha(color, 0.3)}`,
+          width: 64,
+          height: 64,
           '&:hover': {
-            transform: 'scale(1.1)',
-            boxShadow: `0 6px 16px ${alpha(color, 0.4)}`,
+            transform: 'translateY(-2px) scale(1.05)',
+            boxShadow: `0 8px 20px ${alpha(color, 0.4)}`,
           },
           transition: 'all 0.2s ease',
         }}
@@ -290,27 +376,32 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <Box>
+    <Box className="fade-in">
       {/* Header */}
-      <Box sx={{ mb: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+      <Box sx={{ mb: 5 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
           <Box>
             <Typography
-              variant="h3"
+              variant="h2"
               component="h1"
-              fontWeight={800}
+              fontWeight={700}
               gutterBottom
               sx={{
                 fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-                background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                color: '#0f172a',
+                mb: 2,
               }}
             >
               Welcome back! 👋
             </Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
+            <Typography 
+              variant="h6" 
+              sx={{ 
+                color: '#64748b',
+                fontWeight: 400,
+                mb: 4,
+              }}
+            >
               Here's what's happening with your practice today.
             </Typography>
           </Box>
@@ -320,24 +411,63 @@ const Dashboard: React.FC = () => {
               startIcon={<Refresh />}
               onClick={handleRefresh}
               disabled={refreshing}
-              sx={{ borderRadius: 3 }}
+              sx={{ 
+                borderRadius: 2,
+                borderColor: '#e2e8f0',
+                color: '#0f172a',
+                fontWeight: 500,
+                '&:hover': {
+                  backgroundColor: '#f8fafc',
+                  borderColor: '#cbd5e1',
+                },
+              }}
             >
               {refreshing ? 'Refreshing...' : 'Refresh'}
             </Button>
-            <Button variant="contained" startIcon={<Download />} sx={{ borderRadius: 3 }}>
+            <Button 
+              variant="contained" 
+              startIcon={<Download />} 
+              sx={{ 
+                borderRadius: 2,
+                backgroundColor: '#2563eb',
+                fontWeight: 500,
+                '&:hover': {
+                  backgroundColor: '#1d4ed8',
+                },
+              }}
+            >
               Export Report
             </Button>
           </Box>
         </Box>
 
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-          <Chip icon={<Star />} label="Performance: Excellent" color="success" sx={{ fontWeight: 600 }} />
-          <Chip icon={<Speed />} label="System Status: Online" color="primary" sx={{ fontWeight: 600 }} />
+          <Chip 
+            icon={<Star />} 
+            label="Performance: Excellent" 
+            sx={{ 
+              fontWeight: 500,
+              backgroundColor: '#ecfdf5',
+              color: '#059669',
+            }} 
+          />
+          <Chip 
+            icon={<Speed />} 
+            label="System Status: Online" 
+            sx={{ 
+              fontWeight: 500,
+              backgroundColor: '#dbeafe',
+              color: '#1d4ed8',
+            }} 
+          />
           <Chip
             icon={<Notifications />}
             label="3 New Notifications"
-            color="warning"
-            sx={{ fontWeight: 600 }}
+            sx={{ 
+              fontWeight: 500,
+              backgroundColor: '#fffbeb',
+              color: '#d97706',
+            }}
           />
         </Box>
       </Box>
@@ -394,25 +524,100 @@ const Dashboard: React.FC = () => {
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {/* Revenue Chart */}
         <Grid item xs={12} lg={8}>
-          <Card>
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Card className="glass-card">
+            <CardContent sx={{ p: 4 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
                 <Box>
-                  <Typography variant="h5" fontWeight={700} gutterBottom>
+                  <Typography 
+                    variant="h5" 
+                    className="card-title"
+                    sx={{ 
+                      fontWeight: 800, 
+                      color: '#1e293b',
+                      textShadow: 'none',
+                      mb: 1,
+                    }}
+                  >
                     Revenue Overview
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography 
+                    variant="body2" 
+                    className="card-subtitle"
+                    sx={{ 
+                      color: '#64748b',
+                    }}
+                  >
                     Track your monthly revenue and expenses
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 1 }}>
-                  <Button size="small" variant={timeRange === '7d' ? 'contained' : 'outlined'}>
+                  <Button 
+                    size="small" 
+                    variant={timeRange === '7d' ? 'contained' : 'outlined'}
+                    sx={{
+                      borderRadius: 2,
+                      fontWeight: 600,
+                      ...(timeRange === '7d' ? {
+                        backgroundColor: '#2563eb',
+                        color: 'white',
+                        boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)',
+                      } : {
+                        backgroundColor: 'transparent',
+                        border: '1px solid #e2e8f0',
+                        color: '#0f172a',
+                        '&:hover': {
+                          backgroundColor: '#f8fafc',
+                          borderColor: '#cbd5e1',
+                        },
+                      }),
+                    }}
+                  >
                     7D
                   </Button>
-                  <Button size="small" variant={timeRange === '30d' ? 'contained' : 'outlined'}>
+                  <Button 
+                    size="small" 
+                    variant={timeRange === '30d' ? 'contained' : 'outlined'}
+                    sx={{
+                      borderRadius: 2,
+                      fontWeight: 600,
+                      ...(timeRange === '30d' ? {
+                        backgroundColor: '#2563eb',
+                        color: 'white',
+                        boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)',
+                      } : {
+                        backgroundColor: 'transparent',
+                        border: '1px solid #e2e8f0',
+                        color: '#0f172a',
+                        '&:hover': {
+                          backgroundColor: '#f8fafc',
+                          borderColor: '#cbd5e1',
+                        },
+                      }),
+                    }}
+                  >
                     30D
                   </Button>
-                  <Button size="small" variant={timeRange === '90d' ? 'contained' : 'outlined'}>
+                  <Button 
+                    size="small" 
+                    variant={timeRange === '90d' ? 'contained' : 'outlined'}
+                    sx={{
+                      borderRadius: 2,
+                      fontWeight: 600,
+                      ...(timeRange === '90d' ? {
+                        backgroundColor: '#2563eb',
+                        color: 'white',
+                        boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)',
+                      } : {
+                        backgroundColor: 'transparent',
+                        border: '1px solid #e2e8f0',
+                        color: '#0f172a',
+                        '&:hover': {
+                          backgroundColor: '#f8fafc',
+                          borderColor: '#cbd5e1',
+                        },
+                      }),
+                    }}
+                  >
                     90D
                   </Button>
                 </Box>
@@ -466,9 +671,18 @@ const Dashboard: React.FC = () => {
 
         {/* Project Status */}
         <Grid item xs={12} lg={4}>
-          <Card>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight={700} gutterBottom>
+          <Card className="glass-card">
+            <CardContent sx={{ p: 4 }}>
+              <Typography 
+                variant="h6" 
+                className="card-title"
+                sx={{ 
+                  fontWeight: 800, 
+                  color: '#1e293b',
+                  textShadow: 'none',
+                  mb: 3,
+                }}
+              >
                 Project Status
               </Typography>
               <Box sx={{ height: 250, mt: 2 }}>
@@ -491,25 +705,67 @@ const Dashboard: React.FC = () => {
                   </PieChart>
                 </ResponsiveContainer>
               </Box>
-              <Box sx={{ mt: 2 }}>
+              <Box sx={{ mt: 3 }}>
                 {projectStatusData.map((item, index) => (
-                  <Box key={item.name} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                  <Box 
+                    key={item.name} 
+                    sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      mb: 2,
+                      p: 1.5,
+                      borderRadius: 2,
+                      backgroundColor: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      '&:hover': {
+                        backgroundColor: '#f1f5f9',
+                        transform: 'translateX(4px)',
+                      },
+                      transition: 'all 0.3s ease',
+                    }}
+                  >
                     <Box
                       sx={{
-                        width: 12,
-                        height: 12,
+                        width: 16,
+                        height: 16,
                         bgcolor: item.color,
                         borderRadius: '50%',
-                        mr: 1,
+                        mr: 2,
+                        boxShadow: `0 0 10px ${alpha(item.color, 0.5)}`,
+                        border: '2px solid #ffffff',
                       }}
                     />
-                    <Typography variant="body2" sx={{ flexGrow: 1 }}>
+                    <Typography 
+                      variant="body2" 
+                      className="card-subtitle"
+                      sx={{ 
+                        flexGrow: 1,
+                        color: '#1e293b',
+                        textShadow: 'none',
+                        fontWeight: 500,
+                      }}
+                    >
                       {item.name}
                     </Typography>
-                    <Typography variant="body2" fontWeight={700} sx={{ mr: 1 }}>
+                    <Typography 
+                      variant="body2" 
+                      className="card-value"
+                      sx={{ 
+                        mr: 1,
+                        color: '#1e293b',
+                        textShadow: 'none',
+                        fontWeight: 700,
+                      }}
+                    >
                       {item.value}%
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography 
+                      variant="caption" 
+                      className="card-subtitle"
+                      sx={{ 
+                        color: '#64748b',
+                      }}
+                    >
                       ({item.count})
                     </Typography>
                   </Box>
@@ -524,13 +780,34 @@ const Dashboard: React.FC = () => {
       <Grid container spacing={3}>
         {/* Upcoming Deadlines */}
         <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h6" fontWeight={700}>
+          <Card className="glass-card">
+            <CardContent sx={{ p: 4 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+                <Typography 
+                  variant="h6" 
+                  className="card-title"
+                  sx={{ 
+                    fontWeight: 700, 
+                    color: '#0f172a',
+                  }}
+                >
                   Upcoming Deadlines
                 </Typography>
-                <Button size="small" startIcon={<FilterList />}>
+                <Button 
+                  size="small" 
+                  startIcon={<FilterList />}
+                  sx={{
+                    borderRadius: 2,
+                    fontWeight: 600,
+                    backgroundColor: 'transparent',
+                    border: '1px solid #e2e8f0',
+                    color: '#0f172a',
+                    '&:hover': {
+                      backgroundColor: '#f8fafc',
+                      borderColor: '#cbd5e1',
+                    },
+                  }}
+                >
                   Filter
                 </Button>
               </Box>
@@ -539,23 +816,43 @@ const Dashboard: React.FC = () => {
                   <React.Fragment key={index}>
                     <ListItem
                       sx={{
-                        borderRadius: 2,
-                        mb: 1,
+                        borderRadius: 3,
+                        mb: 2,
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #e2e8f0',
                         '&:hover': {
-                          backgroundColor: alpha(theme.palette.primary.main, 0.04),
+                          backgroundColor: '#f1f5f9',
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)',
                         },
+                        transition: 'all 0.3s ease',
                       }}
                     >
-                      <ListItemIcon>{getActivityIcon(deadline.priority)}</ListItemIcon>
+                      <ListItemIcon sx={{ color: '#64748b', minWidth: 40 }}>
+                        {getActivityIcon(deadline.priority)}
+                      </ListItemIcon>
                       <ListItemText
                         primary={
-                          <Typography fontWeight={600} color="text.primary">
+                          <Typography 
+                            className="card-title"
+                            sx={{ 
+                              fontWeight: 700, 
+                              color: '#0f172a',
+                            }}
+                          >
                             {deadline.text}
                           </Typography>
                         }
                         secondary={
                           <>
-                            <Typography component="span" variant="body2" color="text.secondary">
+                            <Typography 
+                              component="span" 
+                              variant="body2" 
+                              className="card-subtitle"
+                              sx={{ 
+                                color: '#64748b',
+                              }}
+                            >
                               {deadline.client} • {deadline.type}
                             </Typography>
                           </>
@@ -564,7 +861,26 @@ const Dashboard: React.FC = () => {
                       <Chip
                         label={`${deadline.daysLeft} days`}
                         size="small"
-                        color={getPriorityColor(deadline.priority)}
+                        className="status-chip"
+                        sx={{
+                          background: getPriorityColor(deadline.priority) === 'error' 
+                            ? 'linear-gradient(135deg, #f44336 0%, #ef5350 100%)'
+                            : getPriorityColor(deadline.priority) === 'warning'
+                            ? 'linear-gradient(135deg, #ff9800 0%, #ffb74d 100%)'
+                            : 'linear-gradient(135deg, #4caf50 0%, #66bb6a 100%)',
+                          color: 'white',
+                          fontWeight: 700,
+                          fontSize: '0.75rem',
+                          height: 28,
+                          boxShadow: getPriorityColor(deadline.priority) === 'error' 
+                            ? '0 4px 15px rgba(244, 67, 54, 0.4)'
+                            : getPriorityColor(deadline.priority) === 'warning'
+                            ? '0 4px 15px rgba(255, 152, 0, 0.4)'
+                            : '0 4px 15px rgba(76, 175, 80, 0.4)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          backdropFilter: 'blur(10px)',
+                          WebkitBackdropFilter: 'blur(10px)',
+                        }}
                       />
                     </ListItem>
                     {index < upcomingDeadlines.length - 1 && <Divider />}
@@ -577,9 +893,18 @@ const Dashboard: React.FC = () => {
 
         {/* Recent Activities */}
         <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight={700} gutterBottom>
+          <Card className="glass-card">
+            <CardContent sx={{ p: 4 }}>
+              <Typography 
+                variant="h6" 
+                className="card-title"
+                sx={{ 
+                  fontWeight: 800, 
+                  color: '#1e293b',
+                  textShadow: 'none',
+                  mb: 3,
+                }}
+              >
                 Recent Activities
               </Typography>
               <List>
@@ -587,33 +912,67 @@ const Dashboard: React.FC = () => {
                   <React.Fragment key={index}>
                     <ListItem
                       sx={{
-                        borderRadius: 2,
-                        mb: 1,
+                        borderRadius: 3,
+                        mb: 2,
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #e2e8f0',
                         '&:hover': {
-                          backgroundColor: alpha(theme.palette.primary.main, 0.04),
+                          backgroundColor: '#f1f5f9',
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)',
                         },
+                        transition: 'all 0.3s ease',
                       }}
                     >
-                      <ListItemIcon>{getActivityIcon(activity.type)}</ListItemIcon>
+                      <ListItemIcon sx={{ color: '#64748b', minWidth: 40 }}>
+                        {getActivityIcon(activity.type)}
+                      </ListItemIcon>
                       <ListItemText
                         primary={
-                          <Typography fontWeight={600} color="text.primary">
+                          <Typography 
+                            className="card-title"
+                            sx={{ 
+                              fontWeight: 700, 
+                              color: '#0f172a',
+                            }}
+                          >
                             {activity.text}
                           </Typography>
                         }
                         secondary={
                           <>
-                            <Typography component="span" variant="body2" color="text.secondary">
+                            <Typography 
+                              component="span" 
+                              variant="body2" 
+                              className="card-subtitle"
+                              sx={{ 
+                                color: '#64748b',
+                              }}
+                            >
                               {activity.client}
                             </Typography>
                             {' • '}
-                            <Typography component="span" variant="caption" color="text.secondary">
+                            <Typography 
+                              component="span" 
+                              variant="caption" 
+                              className="card-subtitle"
+                              sx={{ 
+                                color: 'rgba(255, 255, 255, 0.6)',
+                              }}
+                            >
                               {activity.time}
                             </Typography>
                           </>
                         }
                       />
-                      <Typography variant="body2" fontWeight={600} color="primary">
+                      <Typography 
+                        variant="body2" 
+                        className="amount-text"
+                        sx={{ 
+                          fontWeight: 700, 
+                          color: 'success.main',
+                        }}
+                      >
                         {activity.amount}
                       </Typography>
                     </ListItem>

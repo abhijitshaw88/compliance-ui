@@ -61,11 +61,13 @@ const Header: React.FC = () => {
       position="static"
       elevation={0}
       sx={{
-        background: 'white',
+        backgroundColor: '#ffffff',
         borderBottom: '1px solid #e2e8f0',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-        height: 64, // Reduced height for better spacing
-        marginBottom: 1, // Add margin for better separation
+        height: 64,
+        marginBottom: 0,
+        borderRadius: 0,
+        position: 'relative',
       }}
     >
       <Toolbar sx={{ height: 64, px: { xs: 2, sm: 3 } }}>
@@ -78,9 +80,13 @@ const Header: React.FC = () => {
           sx={{ 
             mr: 2,
             color: '#64748b',
+            backgroundColor: 'transparent',
+            borderRadius: 8,
             '&:hover': {
-              backgroundColor: alpha(theme.palette.primary.main, 0.08),
+              backgroundColor: '#f8fafc',
+              color: '#0f172a',
             },
+            transition: 'all 0.2s ease',
           }}
         >
           <MenuIcon />
@@ -90,18 +96,18 @@ const Header: React.FC = () => {
         <Box
           component="form"
           onSubmit={handleSearch}
-          sx={{
-            flexGrow: 1,
-            maxWidth: 600,
-            mr: 3,
-          }}
+            sx={{
+              flexGrow: 1,
+              maxWidth: 500,
+              mr: 2,
+            }}
         >
           <TextField
             fullWidth
-            placeholder="Search clients, invoices, transactions..."
+            placeholder="Search anything..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            size="small"
+            size="medium"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -111,14 +117,23 @@ const Header: React.FC = () => {
             }}
             sx={{
               '& .MuiOutlinedInput-root': {
-                backgroundColor: '#f8fafc',
-                borderRadius: 2,
+                backgroundColor: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: 8,
+                color: '#0f172a',
+                height: 40,
                 '&:hover': {
-                  backgroundColor: '#f1f5f9',
+                  borderColor: '#cbd5e1',
                 },
                 '&.Mui-focused': {
-                  backgroundColor: 'white',
+                  borderColor: '#2563eb',
+                  borderWidth: 2,
                   boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.1)',
+                },
+                '& input::placeholder': {
+                  color: '#94a3b8',
+                  opacity: 1,
+                  fontWeight: 400,
                 },
               },
             }}
@@ -130,9 +145,13 @@ const Header: React.FC = () => {
           sx={{ 
             mr: 2,
             color: '#64748b',
+            backgroundColor: 'transparent',
+            borderRadius: 8,
             '&:hover': {
-              backgroundColor: alpha(theme.palette.warning.main, 0.08),
+              backgroundColor: '#f8fafc',
+              color: '#0f172a',
             },
+            transition: 'all 0.2s ease',
           }}
         >
           <Badge 
@@ -140,8 +159,10 @@ const Header: React.FC = () => {
             color="error"
             sx={{
               '& .MuiBadge-badge': {
-                background: 'linear-gradient(135deg, #ef4444 0%, #f87171 100%)',
+                backgroundColor: '#ef4444',
                 fontWeight: 600,
+                fontSize: '0.75rem',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
               },
             }}
           >
@@ -152,11 +173,20 @@ const Header: React.FC = () => {
         {/* User Profile */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {!isMobile && (
-            <Box sx={{ mr: 2, textAlign: 'right' }}>
-              <Typography variant="body2" fontWeight={600} color="text.primary">
+            <Box sx={{ mr: 3, textAlign: 'right' }}>
+              <Typography 
+                variant="body2" 
+                fontWeight={600} 
+                color="#0f172a"
+              >
                 {user?.full_name || 'System Administrator'}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  color: '#64748b',
+                }}
+              >
                 {user?.role || 'Admin'}
               </Typography>
             </Box>
@@ -167,17 +197,20 @@ const Header: React.FC = () => {
             sx={{
               p: 0.5,
               '&:hover': {
-                backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                backgroundColor: '#f8fafc',
+                transform: 'scale(1.05)',
               },
+              transition: 'all 0.2s ease',
             }}
           >
             <Avatar 
               sx={{ 
                 width: 40, 
                 height: 40,
-                background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+                backgroundColor: '#2563eb',
                 fontWeight: 600,
                 fontSize: '1rem',
+                boxShadow: '0 2px 8px rgba(37, 99, 235, 0.2)',
               }}
             >
               {user?.full_name?.charAt(0) || 'S'}
@@ -201,44 +234,65 @@ const Header: React.FC = () => {
           onClose={handleProfileMenuClose}
           PaperProps={{
             sx: {
-              mt: 1,
-              borderRadius: 2,
-              minWidth: 200,
-              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-              border: '1px solid #e2e8f0',
+              mt: 2,
+              borderRadius: 20,
+              minWidth: 240,
+              background: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
             },
           }}
         >
-          <Box sx={{ p: 2, borderBottom: '1px solid #f1f5f9' }}>
-            <Typography variant="subtitle2" fontWeight={600}>
+          <Box sx={{ p: 3, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <Typography 
+              variant="subtitle2" 
+              fontWeight={700}
+              color="white"
+              sx={{}}
+            >
               {user?.full_name || 'System Administrator'}
             </Typography>
-            <Typography variant="caption" color="text.secondary">
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                color: 'rgba(255, 255, 255, 0.7)',
+              }}
+            >
               {user?.email || 'admin@compliance.com'}
             </Typography>
           </Box>
           <MenuItem 
             onClick={() => { navigate('/settings'); handleProfileMenuClose(); }}
             sx={{ 
-              py: 1.5,
+              py: 2,
+              px: 3,
+              color: 'white',
               '&:hover': {
-                background: alpha(theme.palette.primary.main, 0.08),
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateX(4px)',
               },
+              transition: 'all 0.2s ease',
             }}
           >
-            <SettingsIcon sx={{ mr: 2, color: 'text.secondary' }} />
+            <SettingsIcon sx={{ mr: 2, color: 'rgba(255, 255, 255, 0.7)' }} />
             Settings
           </MenuItem>
           <MenuItem 
             onClick={handleLogout}
             sx={{ 
-              py: 1.5,
+              py: 2,
+              px: 3,
+              color: 'white',
               '&:hover': {
-                background: alpha(theme.palette.error.main, 0.08),
+                background: 'rgba(239, 68, 68, 0.1)',
+                transform: 'translateX(4px)',
               },
+              transition: 'all 0.2s ease',
             }}
           >
-            <LogoutIcon sx={{ mr: 2, color: 'error.main' }} />
+            <LogoutIcon sx={{ mr: 2, color: '#ef4444' }} />
             Logout
           </MenuItem>
         </Menu>

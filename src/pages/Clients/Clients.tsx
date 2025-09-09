@@ -416,61 +416,116 @@ const Clients: React.FC = () => {
   }
 
   return (
-    <Box>
+    <Box className="fade-in">
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 4 }}>
         <Box>
             <Typography 
-              variant="h3" 
+              variant="h2" 
               component="h1" 
-              fontWeight={800} 
-              gutterBottom
-              sx={{
-                background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+              className="card-title"
+              sx={{ 
+                fontWeight: 900, 
+                color: '#1e293b',
+                textShadow: 'none',
+                mb: 2,
               }}
             >
             Client Management
           </Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
+            <Typography 
+              variant="h6" 
+              className="card-subtitle"
+              sx={{ 
+                color: '#64748b',
+                textShadow: 'none',
+                fontWeight: 500,
+                mb: 3,
+              }}
+            >
             Manage your clients and their information
           </Typography>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
               <Chip
                 icon={<PersonIcon />}
                 label={`${clients.length} Total Clients`}
-                color="primary"
-                variant="outlined"
+                className="status-chip"
+                sx={{
+                  background: 'rgba(99, 102, 241, 0.2)',
+                  color: '#6366f1',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  fontWeight: 700,
+                }}
               />
               <Chip
                 icon={<CheckCircleIcon />}
                 label={`${clients.filter(c => c.status === 'active').length} Active`}
-                color="success"
-                variant="outlined"
+                className="status-chip"
+                sx={{
+                  background: 'rgba(16, 185, 129, 0.2)',
+                  color: '#10b981',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  fontWeight: 700,
+                }}
               />
               <Chip
                 icon={<WarningIcon />}
                 label={`${clients.filter(c => c.status === 'pending').length} Pending`}
-                color="warning"
-                variant="outlined"
+                className="status-chip"
+                sx={{
+                  background: 'rgba(245, 158, 11, 0.2)',
+                  color: '#f59e0b',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  fontWeight: 700,
+                }}
               />
         </Box>
           </Box>
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
             <Button
               variant="outlined"
               startIcon={<DownloadIcon />}
-              sx={{ borderRadius: 3 }}
+              className="hover-lift"
+              sx={{ 
+                borderRadius: 3,
+                background: 'rgba(0, 0, 0, 0.05)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '2px solid rgba(0, 0, 0, 0.1)',
+                color: '#1e293b',
+                fontWeight: 600,
+                '&:hover': {
+                  background: 'rgba(0, 0, 0, 0.1)',
+                  border: '2px solid rgba(0, 0, 0, 0.2)',
+                },
+              }}
             >
               Export
             </Button>
             <Button
               variant="outlined"
               startIcon={<UploadIcon />}
-              sx={{ borderRadius: 3 }}
+              className="hover-lift"
+              sx={{ 
+                borderRadius: 3,
+                background: 'rgba(0, 0, 0, 0.05)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '2px solid rgba(0, 0, 0, 0.1)',
+                color: '#1e293b',
+                fontWeight: 600,
+                '&:hover': {
+                  background: 'rgba(0, 0, 0, 0.1)',
+                  border: '2px solid rgba(0, 0, 0, 0.2)',
+                },
+              }}
             >
               Import
             </Button>
@@ -478,11 +533,18 @@ const Clients: React.FC = () => {
           variant="contained"
           startIcon={<AddIcon />}
               onClick={handleAddClient}
+          className="hover-lift"
           sx={{
-            px: 3,
-            py: 1.5,
-            fontWeight: 600,
-                borderRadius: 3,
+            px: 4,
+            py: 2,
+            fontWeight: 700,
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            boxShadow: '0 8px 32px rgba(99, 102, 241, 0.3)',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+              boxShadow: '0 12px 40px rgba(99, 102, 241, 0.4)',
+            },
           }}
         >
           Add New Client
@@ -491,8 +553,8 @@ const Clients: React.FC = () => {
       </Box>
 
       {/* Search and Filters */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent sx={{ p: 3 }}>
+      <Card className="glass-card" sx={{ mb: 4 }}>
+        <CardContent sx={{ p: 4 }}>
           <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={4}>
               <TextField
@@ -503,25 +565,67 @@ const Clients: React.FC = () => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon />
+                      <SearchIcon sx={{ color: 'rgba(0, 0, 0, 0.6)' }} />
                     </InputAdornment>
                   ),
                 }}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    borderRadius: 2,
+                    borderRadius: 3,
+                    background: 'rgba(0, 0, 0, 0.05)',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
+                    color: '#1e293b',
+                    '&:hover': {
+                      border: '1px solid rgba(0, 0, 0, 0.2)',
+                    },
+                    '&.Mui-focused': {
+                      border: '2px solid #6366f1',
+                      boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.1)',
+                    },
+                    '& fieldset': {
+                      border: 'none',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: '#1e293b',
+                    '&::placeholder': {
+                      color: 'rgba(0, 0, 0, 0.5)',
+                      opacity: 1,
+                    },
                   },
                 }}
               />
             </Grid>
               <Grid item xs={12} md={2}>
               <FormControl fullWidth>
-                <InputLabel>Status</InputLabel>
+                <InputLabel sx={{ color: 'rgba(0, 0, 0, 0.6)' }}>Status</InputLabel>
                 <Select
                   value={statusFilter}
                   label="Status"
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  sx={{ borderRadius: 2 }}
+                  sx={{ 
+                    borderRadius: 3,
+                    background: 'rgba(0, 0, 0, 0.05)',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
+                    color: '#1e293b',
+                    '&:hover': {
+                      border: '1px solid rgba(0, 0, 0, 0.2)',
+                    },
+                    '&.Mui-focused': {
+                      border: '2px solid #6366f1',
+                      boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.1)',
+                    },
+                    '& fieldset': {
+                      border: 'none',
+                    },
+                    '& .MuiSelect-icon': {
+                      color: '#64748b',
+                    },
+                  }}
                 >
                   <MenuItem value="all">All Status</MenuItem>
                   <MenuItem value="active">Active</MenuItem>
@@ -533,12 +637,32 @@ const Clients: React.FC = () => {
             </Grid>
               <Grid item xs={12} md={2}>
                 <FormControl fullWidth>
-                  <InputLabel>Priority</InputLabel>
+                  <InputLabel sx={{ color: 'rgba(0, 0, 0, 0.6)' }}>Priority</InputLabel>
                   <Select
                     value={priorityFilter}
                     label="Priority"
                     onChange={(e) => setPriorityFilter(e.target.value)}
-                    sx={{ borderRadius: 2 }}
+                    sx={{ 
+                      borderRadius: 3,
+                      background: 'rgba(0, 0, 0, 0.05)',
+                      backdropFilter: 'blur(10px)',
+                      WebkitBackdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(0, 0, 0, 0.1)',
+                      color: '#1e293b',
+                      '&:hover': {
+                        border: '1px solid rgba(0, 0, 0, 0.2)',
+                      },
+                      '&.Mui-focused': {
+                        border: '2px solid #6366f1',
+                        boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.1)',
+                      },
+                      '& fieldset': {
+                        border: 'none',
+                      },
+                      '& .MuiSelect-icon': {
+                        color: '#64748b',
+                      },
+                    }}
                   >
                     <MenuItem value="all">All Priority</MenuItem>
                     <MenuItem value="high">High</MenuItem>
@@ -549,12 +673,32 @@ const Clients: React.FC = () => {
               </Grid>
               <Grid item xs={12} md={2}>
               <FormControl fullWidth>
-                <InputLabel>Sort By</InputLabel>
+                <InputLabel sx={{ color: 'rgba(0, 0, 0, 0.6)' }}>Sort By</InputLabel>
                 <Select
                   value={sortBy}
                   label="Sort By"
                   onChange={(e) => setSortBy(e.target.value)}
-                  sx={{ borderRadius: 2 }}
+                  sx={{ 
+                    borderRadius: 3,
+                    background: 'rgba(0, 0, 0, 0.05)',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
+                    color: '#1e293b',
+                    '&:hover': {
+                      border: '1px solid rgba(0, 0, 0, 0.2)',
+                    },
+                    '&.Mui-focused': {
+                      border: '2px solid #6366f1',
+                      boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.1)',
+                    },
+                    '& fieldset': {
+                      border: 'none',
+                    },
+                    '& .MuiSelect-icon': {
+                      color: '#64748b',
+                    },
+                  }}
                 >
                   <MenuItem value="name">Name</MenuItem>
                   <MenuItem value="created_at">Created Date</MenuItem>
@@ -571,7 +715,20 @@ const Clients: React.FC = () => {
                     variant="outlined"
                     startIcon={<SortIcon />}
                     onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                    sx={{ borderRadius: 2 }}
+                    className="hover-lift"
+                    sx={{ 
+                      borderRadius: 3,
+                      background: 'rgba(0, 0, 0, 0.05)',
+                      backdropFilter: 'blur(10px)',
+                      WebkitBackdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(0, 0, 0, 0.1)',
+                      color: '#1e293b',
+                      fontWeight: 600,
+                      '&:hover': {
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid rgba(0, 0, 0, 0.2)',
+                      },
+                    }}
                   >
                     {sortOrder === 'asc' ? '↑' : '↓'}
                   </Button>
@@ -579,7 +736,20 @@ const Clients: React.FC = () => {
                     variant="outlined"
                     startIcon={<FilterIcon />}
                     onClick={() => setShowFilters(!showFilters)}
-                    sx={{ borderRadius: 2 }}
+                    className="hover-lift"
+                    sx={{ 
+                      borderRadius: 3,
+                      background: 'rgba(0, 0, 0, 0.05)',
+                      backdropFilter: 'blur(10px)',
+                      WebkitBackdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(0, 0, 0, 0.1)',
+                      color: '#1e293b',
+                      fontWeight: 600,
+                      '&:hover': {
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid rgba(0, 0, 0, 0.2)',
+                      },
+                    }}
                   >
                     Filters
                   </Button>
@@ -589,14 +759,48 @@ const Clients: React.FC = () => {
 
             {/* Advanced Filters */}
             {showFilters && (
-              <Box sx={{ mt: 3, pt: 3, borderTop: '1px solid', borderColor: 'divider' }}>
-                <Grid container spacing={2}>
+              <Box sx={{ 
+                mt: 4, 
+                pt: 4, 
+                borderTop: '1px solid #e2e8f0',
+                backgroundColor: '#f8fafc',
+                borderRadius: 3,
+                p: 3,
+              }}>
+                <Grid container spacing={3}>
                   <Grid item xs={12} md={3}>
                     <TextField
                       fullWidth
                       label="Industry"
                       placeholder="e.g., Technology, Healthcare"
-                      sx={{ borderRadius: 2 }}
+                      InputLabelProps={{ sx: { color: '#64748b' } }}
+                      sx={{ 
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 3,
+                          background: 'rgba(0, 0, 0, 0.05)',
+                          backdropFilter: 'blur(10px)',
+                          WebkitBackdropFilter: 'blur(10px)',
+                          border: '1px solid rgba(0, 0, 0, 0.1)',
+                          color: '#1e293b',
+                          '&:hover': {
+                            border: '1px solid rgba(0, 0, 0, 0.2)',
+                          },
+                          '&.Mui-focused': {
+                            border: '2px solid #6366f1',
+                            boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.1)',
+                          },
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                        '& .MuiInputBase-input': {
+                          color: '#1e293b',
+                          '&::placeholder': {
+                            color: 'rgba(0, 0, 0, 0.5)',
+                            opacity: 1,
+                          },
+                        },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12} md={3}>
@@ -604,7 +808,34 @@ const Clients: React.FC = () => {
                       fullWidth
                       label="Company Size"
                       placeholder="e.g., Small, Medium, Large"
-                      sx={{ borderRadius: 2 }}
+                      InputLabelProps={{ sx: { color: '#64748b' } }}
+                      sx={{ 
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 3,
+                          background: 'rgba(0, 0, 0, 0.05)',
+                          backdropFilter: 'blur(10px)',
+                          WebkitBackdropFilter: 'blur(10px)',
+                          border: '1px solid rgba(0, 0, 0, 0.1)',
+                          color: '#1e293b',
+                          '&:hover': {
+                            border: '1px solid rgba(0, 0, 0, 0.2)',
+                          },
+                          '&.Mui-focused': {
+                            border: '2px solid #6366f1',
+                            boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.1)',
+                          },
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                        '& .MuiInputBase-input': {
+                          color: '#1e293b',
+                          '&::placeholder': {
+                            color: 'rgba(0, 0, 0, 0.5)',
+                            opacity: 1,
+                          },
+                        },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12} md={3}>
@@ -612,15 +843,73 @@ const Clients: React.FC = () => {
                       fullWidth
                       label="Assigned To"
                       placeholder="Staff member"
-                      sx={{ borderRadius: 2 }}
+                      InputLabelProps={{ sx: { color: '#64748b' } }}
+                      sx={{ 
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 3,
+                          background: 'rgba(0, 0, 0, 0.05)',
+                          backdropFilter: 'blur(10px)',
+                          WebkitBackdropFilter: 'blur(10px)',
+                          border: '1px solid rgba(0, 0, 0, 0.1)',
+                          color: '#1e293b',
+                          '&:hover': {
+                            border: '1px solid rgba(0, 0, 0, 0.2)',
+                          },
+                          '&.Mui-focused': {
+                            border: '2px solid #6366f1',
+                            boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.1)',
+                          },
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                        '& .MuiInputBase-input': {
+                          color: '#1e293b',
+                          '&::placeholder': {
+                            color: 'rgba(0, 0, 0, 0.5)',
+                            opacity: 1,
+                          },
+                        },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12} md={3}>
                     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', height: '100%' }}>
-                      <Button variant="contained" size="small">
+                      <Button 
+                        variant="contained" 
+                        size="small"
+                        className="hover-lift"
+                        sx={{
+                          borderRadius: 3,
+                          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                          boxShadow: '0 4px 15px rgba(99, 102, 241, 0.3)',
+                          fontWeight: 600,
+                          '&:hover': {
+                            background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                            boxShadow: '0 6px 20px rgba(99, 102, 241, 0.4)',
+                          },
+                        }}
+                      >
                         Apply Filters
                       </Button>
-                      <Button variant="outlined" size="small">
+                      <Button 
+                        variant="outlined" 
+                        size="small"
+                        className="hover-lift"
+                        sx={{
+                          borderRadius: 3,
+                          background: 'rgba(0, 0, 0, 0.05)',
+                          backdropFilter: 'blur(10px)',
+                          WebkitBackdropFilter: 'blur(10px)',
+                          border: '1px solid rgba(0, 0, 0, 0.1)',
+                          color: '#1e293b',
+                          fontWeight: 600,
+                          '&:hover': {
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid rgba(0, 0, 0, 0.2)',
+                          },
+                        }}
+                      >
                         Clear
                       </Button>
                     </Box>
@@ -632,12 +921,30 @@ const Clients: React.FC = () => {
       </Card>
 
         {/* View Mode Toggle and Bulk Actions */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
               variant={viewMode === 'table' ? 'contained' : 'outlined'}
               size="small"
               onClick={() => setViewMode('table')}
+              className="hover-lift"
+              sx={{
+                borderRadius: 3,
+                fontWeight: 600,
+                ...(viewMode === 'table' ? {
+                  backgroundColor: '#2563eb',
+                  color: 'white',
+                  boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)',
+                } : {
+                  backgroundColor: 'transparent',
+                  border: '1px solid #e2e8f0',
+                  color: '#0f172a',
+                  '&:hover': {
+                    backgroundColor: '#f8fafc',
+                    borderColor: '#cbd5e1',
+                  },
+                }),
+              }}
             >
               Table
             </Button>
@@ -645,6 +952,24 @@ const Clients: React.FC = () => {
               variant={viewMode === 'grid' ? 'contained' : 'outlined'}
               size="small"
               onClick={() => setViewMode('grid')}
+              className="hover-lift"
+              sx={{
+                borderRadius: 3,
+                fontWeight: 600,
+                ...(viewMode === 'grid' ? {
+                  backgroundColor: '#2563eb',
+                  color: 'white',
+                  boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)',
+                } : {
+                  backgroundColor: 'transparent',
+                  border: '1px solid #e2e8f0',
+                  color: '#0f172a',
+                  '&:hover': {
+                    backgroundColor: '#f8fafc',
+                    borderColor: '#cbd5e1',
+                  },
+                }),
+              }}
             >
               Grid
             </Button>
@@ -652,6 +977,24 @@ const Clients: React.FC = () => {
               variant={viewMode === 'list' ? 'contained' : 'outlined'}
               size="small"
               onClick={() => setViewMode('list')}
+              className="hover-lift"
+              sx={{
+                borderRadius: 3,
+                fontWeight: 600,
+                ...(viewMode === 'list' ? {
+                  backgroundColor: '#2563eb',
+                  color: 'white',
+                  boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)',
+                } : {
+                  backgroundColor: 'transparent',
+                  border: '1px solid #e2e8f0',
+                  color: '#0f172a',
+                  '&:hover': {
+                    backgroundColor: '#f8fafc',
+                    borderColor: '#cbd5e1',
+                  },
+                }),
+              }}
             >
               List
             </Button>
@@ -1387,30 +1730,30 @@ const Clients: React.FC = () => {
                   <Typography variant="h6" gutterBottom>Contact Information</Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <EmailIcon sx={{ mr: 1, color: 'text.secondary' }} />
-                    <Typography>{selectedClient.email}</Typography>
+                    <Typography>{selectedClient?.email}</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <PhoneIcon sx={{ mr: 1, color: 'text.secondary' }} />
-                    <Typography>{selectedClient.phone}</Typography>
+                    <Typography>{selectedClient?.phone}</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <LocationIcon sx={{ mr: 1, color: 'text.secondary' }} />
-                    <Typography>{selectedClient.address}, {selectedClient.city}, {selectedClient.state} - {selectedClient.pincode}</Typography>
+                    <Typography>{selectedClient?.address}, {selectedClient?.city}, {selectedClient?.state} - {selectedClient?.pincode}</Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Typography variant="h6" gutterBottom>Business Information</Typography>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    <strong>GSTIN:</strong> {selectedClient.gstin}
+                    <strong>GSTIN:</strong> {selectedClient?.gstin}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    <strong>PAN:</strong> {selectedClient.pan}
+                    <strong>PAN:</strong> {selectedClient?.pan}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    <strong>Industry:</strong> {selectedClient.industry}
+                    <strong>Industry:</strong> {selectedClient?.industry}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    <strong>Company Size:</strong> {selectedClient.company_size}
+                    <strong>Company Size:</strong> {selectedClient?.company_size}
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
@@ -1420,7 +1763,7 @@ const Clients: React.FC = () => {
                       <Card variant="outlined">
                         <CardContent sx={{ textAlign: 'center' }}>
                           <Typography variant="h4" color="primary.main" fontWeight={600}>
-                            ₹{selectedClient.total_amount?.toLocaleString() || '0'}
+                            ₹{selectedClient?.total_amount?.toLocaleString() || '0'}
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
                             Total Amount
@@ -1432,7 +1775,7 @@ const Clients: React.FC = () => {
                       <Card variant="outlined">
                         <CardContent sx={{ textAlign: 'center' }}>
                           <Typography variant="h4" color="error.main" fontWeight={600}>
-                            ₹{selectedClient.outstanding_amount?.toLocaleString() || '0'}
+                            ₹{selectedClient?.outstanding_amount?.toLocaleString() || '0'}
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
                             Outstanding
@@ -1444,7 +1787,7 @@ const Clients: React.FC = () => {
                       <Card variant="outlined">
                         <CardContent sx={{ textAlign: 'center' }}>
                           <Typography variant="h4" color="success.main" fontWeight={600}>
-                            {selectedClient.total_invoices || 0}
+                            {selectedClient?.total_invoices || 0}
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
                             Total Invoices
@@ -1472,9 +1815,8 @@ const Clients: React.FC = () => {
             </Button>
         </DialogActions>
       </Dialog>
+      </Box>
     </Box>
-    </Box>
-  );
-};
-
+);
+}
 export default Clients;
