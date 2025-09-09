@@ -10,8 +10,6 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { sidebarOpen } = useAppSelector((state) => state.ui);
 
   return (
     <Box

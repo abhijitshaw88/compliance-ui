@@ -12,7 +12,6 @@ import {
   useMediaQuery,
   Avatar,
   Chip,
-  alpha,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,

@@ -13,7 +13,6 @@ import {
   InputAdornment,
   useTheme,
   useMediaQuery,
-  alpha,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
